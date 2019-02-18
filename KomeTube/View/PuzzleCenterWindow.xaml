@@ -1,0 +1,97 @@
+﻿<Window x:Class="KomeTube.View.PuzzleCenterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KomeTube.View"
+        xmlns:component="clr-namespace:KomeTube.View.Component"
+        mc:Ignorable="d"
+        Icon="Image/icon_logo.ico"
+        Title="猜謎"
+        MinHeight="150" MinWidth="380"
+        WindowStartupLocation="CenterOwner"
+        Closed="On_Closed"
+        SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="210"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                        Margin="10,10,0,0">
+                <TextBlock Text="開始時間:"></TextBlock>
+                <TextBlock Margin="3,0,0,0"
+                           Text="{Binding StartTimeText}"
+                           ></TextBlock>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                        Margin="10,30,0,0">
+                <TextBlock Text="經過時間:"></TextBlock>
+                <TextBlock Margin="3,0,0,0"
+                           Text="{Binding ElapsedTimeText}"></TextBlock>
+            </StackPanel>
+
+            <Grid Grid.Column="1">
+                <Button Content="＋"
+                        Command="{Binding CmdAddAnswer}"
+                        FontSize="20"
+                        Margin="10"
+                        Width="30" Height="30"
+                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                        ></Button>
+
+                <Button x:Name="BTN_Start"
+                        Margin="60,10,0,0"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
+                        Width="75" Height="30">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Content" Value="開始"></Setter>
+                            <Setter Property="Command" Value="{Binding CmdStart}"></Setter>
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsStarted}" Value="True">
+                                    <Setter Property="Content" Value="停止"></Setter>
+                                    <Setter Property="Command" Value="{Binding CmdStop}"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1"
+              Background="{StaticResource PuzzleCenter.AnswerList.Background}">
+            <Rectangle Fill="Gray"
+                       Height="1"
+                       VerticalAlignment="Top"
+                       ></Rectangle>
+            
+            <ListView x:Name="LV_Answer"
+                      Background="{StaticResource PuzzleCenter.AnswerList.Background}"
+                      Margin="10,6,10,10"
+                      BorderThickness="0"
+                      HorizontalContentAlignment="Stretch"
+                      VerticalContentAlignment="Stretch">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <component:PuzzleAnswerView >
+
+                        </component:PuzzleAnswerView>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+</Window>

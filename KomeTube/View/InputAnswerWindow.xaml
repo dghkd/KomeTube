@@ -1,0 +1,44 @@
+﻿<Window x:Class="KomeTube.View.InputAnswerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KomeTube.View"
+        mc:Ignorable="d"
+        Icon="Image/icon_logo.ico"
+        Title="Input Answer"
+        Height="110" Width="300"
+        ShowInTaskbar="False"
+        FocusManager.FocusedElement="{Binding ElementName=TXTBOX_Answer}">
+    
+    <Grid Margin="10">
+        <TextBox x:Name="TXTBOX_Answer"
+                 VerticalAlignment="Top"
+                 ></TextBox>
+        
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Right"
+                    >
+            <Button Content="確定"
+                    Height="23" Width="75"
+                    IsDefault="True"
+                    Click="On_OK_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=TXTBOX_Answer}" Value="">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="取消"
+                    Margin="10,0,0,0"
+                    IsCancel="True"
+                    Height="23" Width="75"
+                    Click="On_Cancel_Click"></Button>
+        </StackPanel>
+    </Grid>
+</Window>
