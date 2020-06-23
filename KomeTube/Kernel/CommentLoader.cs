@@ -20,24 +20,26 @@ namespace KomeTube.Kernel
     public class CommentLoader
     {
         #region Private Member
+
         private String _videoUrl;
         private String _currentContinuation;
         private Object _lockContinuation;
 
         private Task _mainTask;
         private CancellationTokenSource _mainTaskCancelTS;
-        #endregion
 
+        #endregion Private Member
 
         #region Constructor
+
         public CommentLoader()
         {
             _videoUrl = "";
             _currentContinuation = "";
             _lockContinuation = new object();
         }
-        #endregion
 
+        #endregion Constructor
 
         #region Public Member
 
@@ -83,10 +85,11 @@ namespace KomeTube.Kernel
         /// CommentLoader當前執行狀態
         /// </summary>
         public CommentLoaderStatus Status { get; private set; }
-        #endregion
 
+        #endregion Public Member
 
         #region Public Method
+
         /// <summary>
         /// 開始讀取留言
         /// <para>請監聽OnCommentsReceive事件取得留言列表</para>
@@ -118,10 +121,11 @@ namespace KomeTube.Kernel
                 RaiseStatusChanged(CommentLoaderStatus.StopRequested);
             }
         }
-        #endregion
 
+        #endregion Public Method
 
         #region Private Method
+
         /// <summary>
         /// 從影片位址解析vid後取得聊天室位址
         /// </summary>
@@ -425,7 +429,7 @@ namespace KomeTube.Kernel
             liveChatTextMessageRenderer.contextMenuAccessibility.accessibilityData.label = Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, "contextMenuAccessibility.accessibilityData.label", ""));
             liveChatTextMessageRenderer.id = Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, "id", ""));
             liveChatTextMessageRenderer.timestampUsec = Convert.ToInt64(JsonHelper.TryGetValueByXPath(txtMsgRd, "timestampUsec", 0));
-            liveChatTextMessageRenderer.message.simpleText = Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, "message.simpleText", ""));
+            liveChatTextMessageRenderer.message.simpleText = Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, "message.runs.0.text", ""));
             //liveChatTextMessageRenderer.contextMenuEndpoint
         }
 
@@ -454,15 +458,17 @@ namespace KomeTube.Kernel
             return ret;
         }
 
-        #endregion
-
+        #endregion Private Method
 
         #region Event
+
         public delegate void ErrorHandleMethod(CommentLoader sender, CommentLoaderErrorCode errCode, object obj);
+
         /// <summary>
         /// CommentLoader發生錯誤事件
         /// </summary>
         public event ErrorHandleMethod OnError;
+
         /// <summary>
         /// 發出錯誤事件
         /// </summary>
@@ -478,10 +484,12 @@ namespace KomeTube.Kernel
         }
 
         public delegate void CommentsReceiveMethod(CommentLoader sender, List<CommentData> lsComments);
+
         /// <summary>
         /// CommentLoader取得新留言事件
         /// </summary>
         public event CommentsReceiveMethod OnCommentsReceive;
+
         /// <summary>
         /// 發出收到留言事件
         /// </summary>
@@ -495,11 +503,13 @@ namespace KomeTube.Kernel
         }
 
         public delegate void StatusChangedMethod(CommentLoader sender, CommentLoaderStatus status);
+
         /// <summary>
         /// CommentLoader執行時發生的各階段事件
         /// <para>GetComments狀態會持續發生</para>
         /// </summary>
         public event StatusChangedMethod OnStatusChanged;
+
         /// <summary>
         /// 發出執行階段狀態事件
         /// </summary>
@@ -513,8 +523,7 @@ namespace KomeTube.Kernel
                 OnStatusChanged(this, status);
             }
         }
-        #endregion
 
-
+        #endregion Event
     }
 }
