@@ -429,11 +429,18 @@ namespace KomeTube.Kernel
             liveChatTextMessageRenderer.contextMenuAccessibility.accessibilityData.label = Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, "contextMenuAccessibility.accessibilityData.label", ""));
             liveChatTextMessageRenderer.id = Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, "id", ""));
             liveChatTextMessageRenderer.timestampUsec = Convert.ToInt64(JsonHelper.TryGetValueByXPath(txtMsgRd, "timestampUsec", 0));
-            liveChatTextMessageRenderer.message.simpleText = Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, "message.runs.0.text", ""));
+
+            //留言包含自訂表情符號或空格時runs陣列會分割成多元素
+            for (int i = 0; i < txtMsgRd["message"]["runs"].Count; i++)
+            {
+                string xPath = String.Format($"message.runs.{i.ToString()}.text");
+                liveChatTextMessageRenderer.message.simpleText += Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, xPath, ""));
+            }
 
             var authorBadges = JsonHelper.TryGetValueByXPath(txtMsgRd, "authorBadges", null);
             if (authorBadges != null)
             {
+                //留言者可能擁有多個徽章 (EX:管理員、會員)
                 for (int i = 0; i < authorBadges.Count; i++)
                 {
                     AuthorBadge badge = new AuthorBadge();
