@@ -8,32 +8,41 @@
         mc:Ignorable="d"
         Icon="Image/icon_logo.ico"
         Title="猜謎"
-        MinHeight="150" MinWidth="380"
+        MinHeight="150"
+        MinWidth="380"
         WindowStartupLocation="CenterOwner"
+        Background="{StaticResource Main.Window.Background}"
         Closed="On_Closed"
         SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground"
+                    Value="{StaticResource PuzzleCenter.AnswerList.Foreground}"></Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="210"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="210" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
                         Margin="10,10,0,0">
                 <TextBlock Text="開始時間:"></TextBlock>
                 <TextBlock Margin="3,0,0,0"
-                           Text="{Binding StartTimeText}"
-                           ></TextBlock>
+                           Text="{Binding StartTimeText}"></TextBlock>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Top" HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
                         Margin="10,30,0,0">
                 <TextBlock Text="經過時間:"></TextBlock>
                 <TextBlock Margin="3,0,0,0"
@@ -45,24 +54,31 @@
                         Command="{Binding CmdAddAnswer}"
                         FontSize="20"
                         Margin="10"
-                        Width="30" Height="30"
-                        VerticalAlignment="Top" HorizontalAlignment="Left"
-                        ></Button>
+                        Width="30"
+                        Height="30"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"></Button>
 
                 <Button x:Name="BTN_Start"
                         Margin="60,10,0,0"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"
-                        Width="75" Height="30">
+                        Width="75"
+                        Height="30">
                     <Button.Style>
                         <Style TargetType="Button">
-                            <Setter Property="Content" Value="開始"></Setter>
-                            <Setter Property="Command" Value="{Binding CmdStart}"></Setter>
+                            <Setter Property="Content"
+                                    Value="開始"></Setter>
+                            <Setter Property="Command"
+                                    Value="{Binding CmdStart}"></Setter>
 
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsStarted}" Value="True">
-                                    <Setter Property="Content" Value="停止"></Setter>
-                                    <Setter Property="Command" Value="{Binding CmdStop}"></Setter>
+                                <DataTrigger Binding="{Binding IsStarted}"
+                                             Value="True">
+                                    <Setter Property="Content"
+                                            Value="停止"></Setter>
+                                    <Setter Property="Command"
+                                            Value="{Binding CmdStop}"></Setter>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -75,9 +91,8 @@
               Background="{StaticResource PuzzleCenter.AnswerList.Background}">
             <Rectangle Fill="Gray"
                        Height="1"
-                       VerticalAlignment="Top"
-                       ></Rectangle>
-            
+                       VerticalAlignment="Top"></Rectangle>
+
             <ListView x:Name="LV_Answer"
                       Background="{StaticResource PuzzleCenter.AnswerList.Background}"
                       Margin="10,6,10,10"
@@ -86,8 +101,7 @@
                       VerticalContentAlignment="Stretch">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <component:PuzzleAnswerView >
-
+                        <component:PuzzleAnswerView>
                         </component:PuzzleAnswerView>
                     </DataTemplate>
                 </ListView.ItemTemplate>

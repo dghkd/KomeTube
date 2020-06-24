@@ -7,28 +7,32 @@
         mc:Ignorable="d"
         Icon="Image/icon_logo.ico"
         Title="Input Answer"
-        Height="110" Width="300"
+        Height="110"
+        Width="300"
         ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource Main.Window.Background}"
         FocusManager.FocusedElement="{Binding ElementName=TXTBOX_Answer}">
-    
+
     <Grid Margin="10">
         <TextBox x:Name="TXTBOX_Answer"
-                 VerticalAlignment="Top"
-                 ></TextBox>
-        
+                 VerticalAlignment="Top"></TextBox>
+
         <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Bottom"
-                    HorizontalAlignment="Right"
-                    >
+                    HorizontalAlignment="Right">
             <Button Content="確定"
-                    Height="23" Width="75"
+                    Height="23"
+                    Width="75"
                     IsDefault="True"
                     Click="On_OK_Click">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Text, ElementName=TXTBOX_Answer}" Value="">
-                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            <DataTrigger Binding="{Binding Text, ElementName=TXTBOX_Answer}"
+                                         Value="">
+                                <Setter Property="IsEnabled"
+                                        Value="False"></Setter>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -37,7 +41,8 @@
             <Button Content="取消"
                     Margin="10,0,0,0"
                     IsCancel="True"
-                    Height="23" Width="75"
+                    Height="23"
+                    Width="75"
                     Click="On_Cancel_Click"></Button>
         </StackPanel>
     </Grid>

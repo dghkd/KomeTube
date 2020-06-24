@@ -27,11 +27,12 @@ namespace KomeTube
     public partial class MainWindow : Window
     {
         #region Private Member
+
         private MainWindowVM _mainVM;
         private ScrollViewer _svCommentDataGrid;
         private int _clickCount = 0;
-        #endregion
 
+        #endregion Private Member
 
         #region Constructor
 
@@ -47,10 +48,9 @@ namespace KomeTube
             _mainVM.CommentColle.CollectionChanged += On_CommentColle_CollectionChanged;
 
             _svCommentDataGrid = GetDescendantByType(DG_Comments, typeof(ScrollViewer)) as ScrollViewer;
-
         }
-        #endregion
 
+        #endregion Constructor
 
         #region Private Method
 
@@ -80,8 +80,8 @@ namespace KomeTube
             }
             return foundElement;
         }
-        #endregion
 
+        #endregion Private Method
 
         #region Event Handle
 
@@ -101,7 +101,7 @@ namespace KomeTube
 
         private void On_CommentColle_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (_svCommentDataGrid.VerticalOffset == _svCommentDataGrid.ScrollableHeight)
+            if (_svCommentDataGrid.VerticalOffset + 20 > _svCommentDataGrid.ScrollableHeight)
             {
                 _svCommentDataGrid.ScrollToBottom();
             }
@@ -126,6 +126,7 @@ namespace KomeTube
 
                     VotingCenterWindow voteWnd = new VotingCenterWindow(votingCenter);
                     voteWnd.Owner = this;
+                    voteWnd.Closed += (s, e) => { this.Activate(); };
                     voteWnd.Show();
 
                     break;
@@ -137,6 +138,7 @@ namespace KomeTube
 
                     PuzzleCenterWindow puzzleWnd = new PuzzleCenterWindow(puzzleCenter);
                     puzzleWnd.Owner = this;
+                    puzzleWnd.Closed += (s, e) => { this.Activate(); };
                     puzzleWnd.Show();
                     break;
 
@@ -144,13 +146,13 @@ namespace KomeTube
                     sender.ExportComment();
                     break;
 
-
                 default:
                     break;
             }
 
             return true;
         }
-        #endregion
+
+        #endregion Event Handle
     }
 }

@@ -6,38 +6,43 @@
         xmlns:local="clr-namespace:KomeTube.View"
         mc:Ignorable="d"
         Icon="Image/icon_logo.ico"
-        Title="名單" Height="300" Width="300"
-        ShowInTaskbar="False" WindowStartupLocation="CenterScreen"
-        >
+        Title="名單"
+        Height="300"
+        Width="300"
+        ShowInTaskbar="False"
+        Background="{StaticResource Main.Window.Background}"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <DataGrid x:Name="DG_Voter"
-                  Style="{StaticResource CommentDataGridStyle}"
-                  >
+                  Style="{StaticResource CommentDataGridStyle}">
             <DataGrid.Resources>
-                <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle_Custom}" />
-                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource DataGridRowStyle}"/>
+                <Style TargetType="{x:Type DataGridCell}"
+                       BasedOn="{StaticResource DataGridCellStyle_Custom}" />
+                <Style TargetType="{x:Type DataGridRow}"
+                       BasedOn="{StaticResource DataGridRowStyle}" />
             </DataGrid.Resources>
             <DataGrid.Columns>
 
-
-                <DataGridTemplateColumn Header="" Width="36">
+                <DataGridTemplateColumn Header=""
+                                        Width="36">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Source="{Binding AuthorPhotoUrl}"
-                                       Margin="2"></Image>
+                                   Margin="2"></Image>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Name" Width="*">
+                <DataGridTemplateColumn Header="Name"
+                                        Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding AuthorName, Mode=OneWay}"
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         IsReadOnly="True"
-                                         TextWrapping="Wrap"
-                                         />
+                                     Background="Transparent"
+                                     Foreground="{StaticResource Main.DataGrid.Foreground}"
+                                     BorderThickness="0"
+                                     IsReadOnly="True"
+                                     TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

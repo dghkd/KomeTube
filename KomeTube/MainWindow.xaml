@@ -7,14 +7,18 @@
         mc:Ignorable="d"
         Icon="View/Image/icon_logo.ico"
         Title="KomeTube"
-        Height="350" Width="620" MinHeight="350" MinWidth="620" 
+        Height="350"
+        Width="620"
+        MinHeight="350"
+        MinWidth="620"
+        Background="{StaticResource Main.Window.Background}"
         WindowStartupLocation="CenterScreen">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <TextBox x:Name="TXTBOX_Url"
@@ -24,23 +28,28 @@
                  Width="320"
                  HorizontalAlignment="Left"
                  VerticalAlignment="Top"
-                 />
+                 VerticalContentAlignment="Center" />
 
         <Button x:Name="BTN_Start"
                 Margin="340,10,0,0"
                 Width="75"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                >
+                VerticalAlignment="Top">
             <Button.Style>
                 <Style TargetType="Button">
-                    <Setter Property="Command" Value="{Binding CmdStart}"></Setter>
-                    <Setter Property="Content" Value="開始"></Setter>
+                    <Setter Property="Command"
+                            Value="{Binding CmdStart}"></Setter>
+                    <Setter Property="Content"
+                            Value="開始"></Setter>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsStopped}" Value="False">
-                            <Setter Property="Content" Value="停止"></Setter>
-                            <Setter Property="Command" Value="{Binding CmdStop}"></Setter>
-                            <Setter Property="IsEnabled" Value="{Binding IsEnableStop}"></Setter>
+                        <DataTrigger Binding="{Binding IsStopped}"
+                                     Value="False">
+                            <Setter Property="Content"
+                                    Value="停止"></Setter>
+                            <Setter Property="Command"
+                                    Value="{Binding CmdStop}"></Setter>
+                            <Setter Property="IsEnabled"
+                                    Value="{Binding IsEnableStop}"></Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -53,27 +62,22 @@
                     VerticalAlignment="Top">
 
             <Button x:Name="BTN_Puzzle"
-                Command="{Binding CmdPuzzle}"
-                Content="猜謎"
-                Width="75"
-                />
+                    Command="{Binding CmdPuzzle}"
+                    Content="猜謎"
+                    Width="75" />
 
             <Button x:Name="BTN_Vote"
                     Margin="10,0,0,0"
-                Command="{Binding CmdVote}"
-                Content="投票"
-                Width="75"
-                />
+                    Command="{Binding CmdVote}"
+                    Content="投票"
+                    Width="75" />
         </StackPanel>
-
-
 
         <Grid Grid.Row="1">
             <Rectangle Margin="340,0,90,0"
-                       Fill="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
-                       MouseLeftButtonUp="On_Rectangle_MouseLeftButtonUp"
-                       />
-            
+                       Fill="{StaticResource Main.Window.Background}"
+                       MouseLeftButtonUp="On_Rectangle_MouseLeftButtonUp" />
+
             <StackPanel Orientation="Horizontal"
                         VerticalAlignment="Center"
                         Margin="10,0,0,0">
@@ -86,24 +90,26 @@
                          IsReadOnly="True"
                          Background="Transparent"
                          Foreground="Gray"
-                         HorizontalAlignment="Left" 
-                         VerticalAlignment="Top"
-                         />
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top" />
 
                 <TextBlock Text="留言總數:"
                            Margin="12,0,0,0"
+                           Foreground="{StaticResource Main.DataGrid.Foreground}"
                            VerticalAlignment="Center"></TextBlock>
                 <TextBlock Text="{Binding TotalCommentCount}"
                            Margin="2,0,0,0"
+                           Foreground="{StaticResource Main.DataGrid.Foreground}"
                            VerticalAlignment="Center"></TextBlock>
 
                 <TextBlock Margin="15,0,0,0"
                            VerticalAlignment="Center"
+                           Foreground="{StaticResource Main.DataGrid.Foreground}"
                            Text="留言人數:"></TextBlock>
                 <TextBlock Text="{Binding TotalAuthorCount}"
                            Margin="2,0,0,0"
+                           Foreground="{StaticResource Main.DataGrid.Foreground}"
                            VerticalAlignment="Center"></TextBlock>
-
             </StackPanel>
 
             <Button Content="匯出留言"
@@ -112,28 +118,31 @@
                     VerticalAlignment="Center"
                     Margin="0,0,10,0"
                     Width="75"></Button>
-
         </Grid>
 
         <Grid Grid.Row="2">
             <DataGrid x:Name="DG_Comments"
-                      Style="{StaticResource CommentDataGridStyle}"
-                      >
+                      Style="{StaticResource CommentDataGridStyle}">
                 <DataGrid.Resources>
-                    <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStyle_Custom}" />
-                    <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource DataGridRowStyle}"/>
+                    <Style TargetType="{x:Type DataGridCell}"
+                           BasedOn="{StaticResource DataGridCellStyle_Custom}" />
+                    <Style TargetType="{x:Type DataGridRow}"
+                           BasedOn="{StaticResource DataGridRowStyle}" />
                 </DataGrid.Resources>
                 <DataGrid.Columns>
 
-                    <DataGridTemplateColumn Header="Time" Width="60">
+                    <DataGridTemplateColumn Header="Time"
+                                            Width="60">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding DateTimeText}" Foreground="{StaticResource Main.DataGrid.Foreground}"></TextBlock>
+                                <TextBlock Text="{Binding DateTimeText}"
+                                           Foreground="{StaticResource Main.DataGrid.Foreground}"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="" Width="36">
+                    <DataGridTemplateColumn Header=""
+                                            Width="36">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Source="{Binding AuthorPhotoUrl}"
@@ -142,34 +151,35 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Name" Width="120">
+                    <DataGridTemplateColumn Header="Name"
+                                            Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding AuthorName, Mode=OneWay}"
                                          Background="Transparent"
+                                         Foreground="{StaticResource Main.DataGrid.Foreground}"
                                          BorderThickness="0"
                                          IsReadOnly="True"
-                                         TextWrapping="Wrap"
-                                         />
+                                         TextWrapping="Wrap" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Message" Width="*">
+                    <DataGridTemplateColumn Header="Message"
+                                            Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding Message, Mode=OneWay}"
                                          Background="Transparent"
+                                         Foreground="{StaticResource Main.DataGrid.Foreground}"
                                          BorderThickness="0"
                                          IsReadOnly="True"
-                                         TextWrapping="Wrap"
-                                         />
+                                         TextWrapping="Wrap" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-
     </Grid>
 </Window>
