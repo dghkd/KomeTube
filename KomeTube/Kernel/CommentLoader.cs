@@ -23,7 +23,7 @@ namespace KomeTube.Kernel
 
         private String _videoUrl;
         private String _currentContinuation;
-        private Object _lockContinuation;
+        private readonly Object _lockContinuation;
 
         private Task _mainTask;
         private CancellationTokenSource _mainTaskCancelTS;
@@ -430,6 +430,17 @@ namespace KomeTube.Kernel
             liveChatTextMessageRenderer.id = Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, "id", ""));
             liveChatTextMessageRenderer.timestampUsec = Convert.ToInt64(JsonHelper.TryGetValueByXPath(txtMsgRd, "timestampUsec", 0));
             liveChatTextMessageRenderer.message.simpleText = Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, "message.runs.0.text", ""));
+
+            var authorBadges = JsonHelper.TryGetValueByXPath(txtMsgRd, "authorBadges", null);
+            if (authorBadges != null)
+            {
+                for (int i = 0; i < authorBadges.Count; i++)
+                {
+                    AuthorBadge badge = new AuthorBadge();
+                    badge.tooltip = Convert.ToString(JsonHelper.TryGetValueByXPath(authorBadges[i], "liveChatAuthorBadgeRenderer.tooltip"));
+                    liveChatTextMessageRenderer.authorBadges.Add(badge);
+                }
+            }
             //liveChatTextMessageRenderer.contextMenuEndpoint
         }
 

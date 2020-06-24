@@ -24,6 +24,7 @@ namespace KomeTube.ViewModel
         private bool _isEnableStop;
         private int _totalCommentCount;
         private int _totalAuthorCount;
+
         /// <summary>
         /// Key:Author ID, Value:Author Name
         /// </summary>
@@ -38,10 +39,11 @@ namespace KomeTube.ViewModel
 
         private VotingCenterVM _votingCenterVM;
         private PuzzleCenterVM _puzzleCenterVM;
-        #endregion
 
+        #endregion Private Member
 
         #region Constructor
+
         public MainWindowVM()
         {
             _cmtLoader = new CommentLoader();
@@ -61,10 +63,10 @@ namespace KomeTube.ViewModel
             this.StatusText = "已停止";
         }
 
-        #endregion
-
+        #endregion Constructor
 
         #region Public Member
+
         /// <summary>
         /// 取得或設定影片網址
         /// </summary>
@@ -73,7 +75,7 @@ namespace KomeTube.ViewModel
             get { return _videoUrl; }
             set { _videoUrl = value; OnPropertyChanged(nameof(VideoUrl)); }
         }
-        
+
         /// <summary>
         /// 取得是否已停止擷取留言狀態
         /// </summary>
@@ -136,12 +138,14 @@ namespace KomeTube.ViewModel
             get;
             private set;
         }
-        #endregion
 
+        #endregion Public Member
 
         #region Command
+
         public const string CmdKey_Start = "CmdKey_Start";
         private CommandBase _cmdStart;
+
         public CommandBase CmdStart
         {
             get
@@ -152,6 +156,7 @@ namespace KomeTube.ViewModel
 
         public const string CmdKey_Stop = "CmdKey_Stop";
         private CommandBase _cmdStop;
+
         public CommandBase CmdStop
         {
             get
@@ -160,30 +165,31 @@ namespace KomeTube.ViewModel
             }
         }
 
-
         public const string CmdKey_Vote = "CmdKey_Vote";
         private CommandBase _cmdVote;
+
         public CommandBase CmdVote
         {
             get
             {
-                return _cmdVote ?? (_cmdVote = new CommandBase(x => ExecuteCommand(CmdKey_Vote),CanExecuteVote));
+                return _cmdVote ?? (_cmdVote = new CommandBase(x => ExecuteCommand(CmdKey_Vote), CanExecuteVote));
             }
         }
 
         public const string CmdKey_Puzzle = "CmdKey_Puzzle";
         private CommandBase _cmdPuzzle;
+
         public CommandBase CmdPuzzle
         {
             get
             {
-                return _cmdPuzzle ?? (_cmdPuzzle = new CommandBase(x => ExecuteCommand(CmdKey_Puzzle),CanExecutePuzzle));
+                return _cmdPuzzle ?? (_cmdPuzzle = new CommandBase(x => ExecuteCommand(CmdKey_Puzzle), CanExecutePuzzle));
             }
         }
 
-
         public const string CmdKey_ExportComment = "CmdKey_ExportComment";
         private CommandBase _cmdExportComment;
+
         public CommandBase CmdExportComment
         {
             get
@@ -191,7 +197,6 @@ namespace KomeTube.ViewModel
                 return _cmdExportComment ?? (_cmdExportComment = new CommandBase(x => ExecuteCommand(CmdKey_ExportComment)));
             }
         }
-
 
         public Func<String, MainWindowVM, bool> CommandAction;
 
@@ -202,10 +207,11 @@ namespace KomeTube.ViewModel
                 this.CommandAction(cmd, this);
             }
         }
-        #endregion
 
+        #endregion Command
 
         #region Public Method
+
         /// <summary>
         /// 開始取得留言
         /// </summary>
@@ -234,9 +240,9 @@ namespace KomeTube.ViewModel
             dlg.Filter = "CSV|*.csv";
             dlg.Title = "匯出留言";
             dlg.DefaultExt = ".csv";
-            
+
             Nullable<bool> result = dlg.ShowDialog();
-            
+
             if (result == true)
             {
                 String filename = dlg.FileName;
@@ -282,8 +288,8 @@ namespace KomeTube.ViewModel
 
             return null;
         }
-        #endregion
 
+        #endregion Public Method
 
         #region Private Method
 
@@ -306,10 +312,11 @@ namespace KomeTube.ViewModel
             }
             return false;
         }
-        #endregion
 
+        #endregion Private Method
 
         #region Event Handle
+
         /// <summary>
         /// CommentLoader收到新留言處理函式
         /// </summary>
@@ -340,7 +347,7 @@ namespace KomeTube.ViewModel
                     }
 
                     //將留言送至猜謎中心
-                    if (_puzzleCenterVM!=null)
+                    if (_puzzleCenterVM != null)
                     {
                         _puzzleCenterVM.Guessing(vm);
                     }
@@ -363,15 +370,19 @@ namespace KomeTube.ViewModel
                 case CommentLoaderErrorCode.CanNotGetLiveChatUrl:
                     errStr = String.Format("無法取得聊天室位址。請檢查輸入的網址:{0}", Convert.ToString(obj));
                     break;
+
                 case CommentLoaderErrorCode.CanNotGetLiveChatHtml:
                     errStr = String.Format("無法取得聊天室內容。 {0}", Convert.ToString(obj));
                     break;
+
                 case CommentLoaderErrorCode.CanNotParseLiveChatHtml:
                     errStr = String.Format("無法解析聊天室HTML。 {0}", Convert.ToString(obj));
                     break;
+
                 case CommentLoaderErrorCode.GetCommentsError:
                     errStr = String.Format("取得留言時發生錯誤。 {0}", Convert.ToString(obj));
                     break;
+
                 default:
                     break;
             }
@@ -391,33 +402,41 @@ namespace KomeTube.ViewModel
                 case CommentLoaderStatus.Null:
                     this.StatusText = "已停止";
                     break;
+
                 case CommentLoaderStatus.Started:
                     this.StatusText = "開始";
                     this.IsStopped = false;
                     this.IsEnableStop = false;
                     break;
+
                 case CommentLoaderStatus.GetLiveChatHtml:
                     this.StatusText = "讀取聊天室";
                     break;
+
                 case CommentLoaderStatus.ParseLiveChatHtml:
                     this.StatusText = "解析聊天室內容";
                     break;
+
                 case CommentLoaderStatus.GetComments:
                     this.StatusText = "取得留言";
                     this.IsEnableStop = true;
                     break;
+
                 case CommentLoaderStatus.StopRequested:
                     this.StatusText = "停止中";
                     break;
+
                 case CommentLoaderStatus.Completed:
                     this.StatusText = "已停止";
                     this.IsStopped = true;
                     this.IsEnableStop = false;
                     break;
+
                 default:
                     break;
             }
         }
-        #endregion
+
+        #endregion Event Handle
     }
 }

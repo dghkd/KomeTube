@@ -155,12 +155,22 @@
                                             Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding AuthorName, Mode=OneWay}"
-                                         Background="Transparent"
-                                         Foreground="{StaticResource Main.DataGrid.Foreground}"
-                                         BorderThickness="0"
-                                         IsReadOnly="True"
-                                         TextWrapping="Wrap" />
+                                <StackPanel>
+                                    <TextBox Text="{Binding AuthorName, Mode=OneWay}"
+                                             Background="Transparent"
+                                             Foreground="{StaticResource Main.DataGrid.Foreground}"
+                                             BorderThickness="0"
+                                             IsReadOnly="True"
+                                             TextWrapping="Wrap" />
+                                    <TextBox Text="{Binding AuthorBadges, Mode=OneWay}"
+                                             Background="Transparent"
+                                             Foreground="{StaticResource Main.DataGrid.Foreground}"
+                                             BorderThickness="0"
+                                             Margin="3,0,0,0"
+                                             VerticalAlignment="Center"
+                                             IsReadOnly="True"
+                                             TextWrapping="Wrap" />
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

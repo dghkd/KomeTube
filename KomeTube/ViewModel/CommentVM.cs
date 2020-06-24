@@ -12,20 +12,23 @@ namespace KomeTube.ViewModel
     public class CommentVM : ViewModelBase
     {
         #region Private Member
+
         private CommentData _data;
         private DateTime _dateTime;
-        #endregion
 
+        #endregion Private Member
 
         #region Constructor
+
         public CommentVM(CommentData data)
         {
             _data = data;
         }
-        #endregion
 
+        #endregion Constructor
 
         #region Public Member
+
         /// <summary>
         /// 取得留言時間
         /// <para>若要使用格式化後的留言時間字串請使用DateTimeText</para>
@@ -84,7 +87,34 @@ namespace KomeTube.ViewModel
 
             set
             {
+            }
+        }
 
+        /// <summary>
+        /// 取得留言者徽章稱號
+        /// </summary>
+        public String AuthorBadges
+        {
+            get
+            {
+                string ret = "";
+
+                if (_data.addChatItemAction.item.IsPaidMessage)
+                {
+                    foreach (var badge in _data.addChatItemAction.item.liveChatPaidMessageRenderer.authorBadges)
+                    {
+                        ret += badge.tooltip + " ";
+                    }
+                }
+                else
+                {
+                    foreach (var badge in _data.addChatItemAction.item.liveChatTextMessageRenderer.authorBadges)
+                    {
+                        ret += badge.tooltip + " ";
+                    }
+                }
+
+                return ret;
             }
         }
 
@@ -107,7 +137,6 @@ namespace KomeTube.ViewModel
                     return _data.addChatItemAction.item.liveChatTextMessageRenderer.message.simpleText;
                 }
             }
-
         }
 
         /// <summary>
@@ -166,6 +195,7 @@ namespace KomeTube.ViewModel
                 }
             }
         }
-        #endregion
+
+        #endregion Public Member
     }
 }

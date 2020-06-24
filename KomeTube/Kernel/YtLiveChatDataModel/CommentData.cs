@@ -16,6 +16,11 @@ namespace KomeTube.Kernel.YtLiveChatDataModel
         public string simpleText { get; set; }
     }
 
+    public class AuthorBadge
+    {
+        public String tooltip { get; set; }
+    }
+
     public class Thumbnail
     {
         public string url { get; set; }
@@ -82,6 +87,7 @@ namespace KomeTube.Kernel.YtLiveChatDataModel
         {
             this.accessibilityData = new AccessibilityData();
         }
+
         public AccessibilityData accessibilityData { get; set; }
     }
 
@@ -108,9 +114,11 @@ namespace KomeTube.Kernel.YtLiveChatDataModel
             this.message = new Message();
             this.authorName = new AuthorName();
             this.authorPhoto = new AuthorPhoto();
+            this.authorBadges = new List<AuthorBadge>();
             this.contextMenuEndpoint = new ContextMenuEndpoint();
             this.contextMenuAccessibility = new ContextMenuAccessibility();
         }
+
         public Message message { get; set; }
         public AuthorName authorName { get; set; }
         public AuthorPhoto authorPhoto { get; set; }
@@ -119,6 +127,7 @@ namespace KomeTube.Kernel.YtLiveChatDataModel
         public long timestampUsec { get; set; }
         public string authorExternalChannelId { get; set; }
         public ContextMenuAccessibility contextMenuAccessibility { get; set; }
+        public List<AuthorBadge> authorBadges { get; set; }
     }
 
     public class Item
@@ -131,6 +140,7 @@ namespace KomeTube.Kernel.YtLiveChatDataModel
 
         public LiveChatTextMessageRenderer liveChatTextMessageRenderer { get; set; }
         public LiveChatPaidMessageRenderer liveChatPaidMessageRenderer { get; set; }
+
         public bool IsPaidMessage
         {
             get
