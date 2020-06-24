@@ -8,6 +8,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.IO;
+using System.Globalization;
+
+using CsvHelper;
 
 using KomeTube.Common;
 using KomeTube.Kernel;
@@ -236,22 +239,51 @@ namespace KomeTube.ViewModel
         /// </summary>
         public void ExportComment()
         {
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.Filter = "CSV|*.csv";
-            dlg.Title = "匯出留言";
-            dlg.DefaultExt = ".csv";
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "CSV |*.csv",
+                Title = "匯出留言",
+                DefaultExt = ".csv"
+            };
 
             Nullable<bool> result = dlg.ShowDialog();
-
-            if (result == true)
+            if (result != true)
             {
-                String filename = dlg.FileName;
-                StringBuilder sb = new StringBuilder();
-                foreach (CommentVM vm in _commentColle)
+                return;
+            }
+
+            ExportComment(dlg.FileName);
+        }
+
+        /// <summary>
+        /// 以CSV格式匯出留言
+        /// </summary>
+        public void ExportComment(string filename)
+        {
+            using (StreamWriter sw = new StreamWriter(filename, false, Encoding.UTF8))
+            {
+                using (CsvWriter cw = new CsvWriter(sw, CultureInfo.InvariantCulture))
                 {
-                    sb.AppendLine(String.Format("{0:yyyyMMddHHmmss},{1},{2}", vm.Date, vm.AuthorName, vm.Message));
+                    cw.Configuration.HasHeaderRecord = false;
+                    cw.Configuration.SanitizeForInjection = true;
+
+                    //寫入內容
+                    List<CommentVM> commentLs = _commentColle.ToList();
+                    foreach (CommentVM vm in commentLs)
+                    {
+                        CommentExportData data = new CommentExportData()
+                        {
+                            Date = string.Format("{0:yyyy/MM/dd HH:mm:ss.fff}", vm.Date),
+                            AuthorName = vm.AuthorName,
+                            AuthorBadges = vm.AuthorBadges,
+                            Message = vm.Message,
+                            PaidMsg = vm.PaidMessage,
+                            AuthorID = vm.AuthorID
+                        };
+                        cw.WriteRecord<CommentExportData>(data);
+                        cw.NextRecord();
+                    }
                 }
-                File.WriteAllText(filename, sb.ToString(), Encoding.UTF8);
             }
         }
 

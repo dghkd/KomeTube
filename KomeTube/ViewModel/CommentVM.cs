@@ -44,12 +44,12 @@ namespace KomeTube.ViewModel
 
                 if (_data.addChatItemAction.item.IsPaidMessage)
                 {
-                    long timeStamp = _data.addChatItemAction.item.liveChatPaidMessageRenderer.timestampUsec / 1000000;
+                    double timeStamp = (double)_data.addChatItemAction.item.liveChatPaidMessageRenderer.timestampUsec / 1000000.0;
                     _dateTime = new DateTime(1970, 1, 1).AddSeconds(timeStamp).ToLocalTime();
                 }
                 else
                 {
-                    long timeStamp = _data.addChatItemAction.item.liveChatTextMessageRenderer.timestampUsec / 1000000;
+                    double timeStamp = (double)_data.addChatItemAction.item.liveChatTextMessageRenderer.timestampUsec / 1000000.0;
                     _dateTime = new DateTime(1970, 1, 1).AddSeconds(timeStamp).ToLocalTime();
                 }
 
