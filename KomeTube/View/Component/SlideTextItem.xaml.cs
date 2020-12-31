@@ -107,24 +107,36 @@ namespace KomeTube.View.Component
 
         #region Public Member
 
+        /// <summary>
+        /// 取得或設定項目顯示停留時間，時間到後自動觸發滑動動畫。單位:毫秒
+        /// </summary>
         public int ShowTime
         {
             get { return (int)GetValue(ShowTimeProperty); }
             set { SetValue(ShowTimeProperty, value); }
         }
 
+        /// <summary>
+        /// 取得或設定項目顯示字串
+        /// </summary>
         public string Text
         {
             get { return (string)GetValue(TextProperty); }
             set { SetValue(TextProperty, value); }
         }
 
+        /// <summary>
+        /// 取得或設定項目是否即將關閉，若True則觸發滑動動畫至消失
+        /// </summary>
         public bool IsClose
         {
             get { return (bool)GetValue(IsCloseProperty); }
             set { SetValue(IsCloseProperty, value); }
         }
 
+        /// <summary>
+        /// 取得或設定項目是否已完成滑動動畫
+        /// </summary>
         public bool IsSlideFinished
         {
             get { return (bool)GetValue(IsSlideFinishedProperty); }
@@ -135,6 +147,9 @@ namespace KomeTube.View.Component
 
         #region Public Method
 
+        /// <summary>
+        /// 開始顯示項目
+        /// </summary>
         public void Show()
         {
             this.IsClose = false;
@@ -144,6 +159,9 @@ namespace KomeTube.View.Component
             _closeTimer.Start();
         }
 
+        /// <summary>
+        /// 觸發滑動動畫準備關閉項目
+        /// </summary>
         public void Close()
         {
             this.IsClose = true;

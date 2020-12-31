@@ -153,6 +153,9 @@ namespace KomeTube.ViewModel
             set { _isShowVoterSlide = value; OnPropertyChanged(nameof(this.IsShowVoterSlide)); }
         }
 
+        /// <summary>
+        /// 取得或設定是否顯示投票者名單按鈕
+        /// </summary>
         public bool IsShowVoterListButton
         {
             get { return _isShowVoteListButton; }
@@ -222,12 +225,20 @@ namespace KomeTube.ViewModel
             OnPropertyChanged("");
         }
 
+        /// <summary>
+        /// 從投票者滑動動畫列表中移除
+        /// </summary>
+        /// <param name="vm">要移除的滑動項目</param>
         public void RemoveShowVoter(SlideTextItemVM vm)
         {
             _showVoterColle.Remove(vm);
         }
 
-        public void RemoveVoter(CommentVM vm)
+        /// <summary>
+        /// 從投票列表中移除投票
+        /// </summary>
+        /// <param name="vm">要移除的投票</param>
+        public void RemoveVote(CommentVM vm)
         {
             _voterColle.Remove(vm);
             this.Count = _voterColle.Count;
@@ -237,10 +248,14 @@ namespace KomeTube.ViewModel
 
         #region Private Method
 
-        private void AddShowVoterColle(CommentVM voter)
+        /// <summary>
+        /// 新增至投票者滑動動畫佇列中等待開始滑動動畫
+        /// </summary>
+        /// <param name="vote">要顯示滑動動畫的投票</param>
+        private void AddShowVoterColle(CommentVM vote)
         {
             SlideTextItemVM showVoter = new SlideTextItemVM();
-            showVoter.Text = voter.AuthorName;
+            showVoter.Text = vote.AuthorName;
             showVoter.SlideFinished += On_ShowVoter_SlideFinished;
             _showVoterQueue.Enqueue(showVoter);
             _showVoterQueueTimer.Start();
@@ -250,19 +265,29 @@ namespace KomeTube.ViewModel
 
         #region Event Handle
 
+        /// <summary>
+        /// 當滑動動畫項目完成滑動後
+        /// </summary>
+        /// <param name="sender">完成滑動動畫的項目</param>
         private void On_ShowVoter_SlideFinished(SlideTextItemVM sender)
         {
+            //從滑動列表中移除
             RemoveShowVoter(sender);
         }
 
+        /// <summary>
+        /// 處理投票者名稱滑動動畫佇列
+        /// </summary>
         private void On_ShowVoterQueue_Elapsed(object sender, ElapsedEventArgs e)
         {
             SlideTextItemVM showVoter;
             if (_showVoterQueue.TryDequeue(out showVoter))
             {
+                //插入列表最上層於UI上顯示
                 _showVoterColle.Insert(0, showVoter);
                 if (_showVoterColle.Count > 2)
                 {
+                    //UI上顯示超過兩列，令第三列提早觸發滑動動畫
                     SlideTextItemVM t = _showVoterColle.ElementAtOrDefault(2);
                     if (t != null)
                     {
@@ -272,6 +297,7 @@ namespace KomeTube.ViewModel
             }
             else
             {
+                //佇列清空，關閉計時器
                 _showVoterQueueTimer.Stop();
             }
         }

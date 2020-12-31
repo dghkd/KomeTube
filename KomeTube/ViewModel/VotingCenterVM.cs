@@ -414,7 +414,7 @@ namespace KomeTube.ViewModel
                         {
                             VoteCandidateVM candidate = tickets.Values.ElementAt(0);
                             CommentVM oldVote = tickets.Keys.ElementAt(0);
-                            candidate.RemoveVoter(oldVote);
+                            candidate.RemoveVote(oldVote);
                             tickets.Remove(oldVote);
                             _allVoteColle.Remove(oldVote);
                         }
