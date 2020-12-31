@@ -431,11 +431,17 @@ namespace KomeTube.Kernel
             liveChatTextMessageRenderer.timestampUsec = Convert.ToInt64(JsonHelper.TryGetValueByXPath(txtMsgRd, "timestampUsec", 0));
 
             //留言包含自訂表情符號或空格時runs陣列會分割成多元素
-            for (int i = 0; i < txtMsgRd["message"]["runs"].Count; i++)
+            dynamic runs = JsonHelper.TryGetValueByXPath(txtMsgRd, "message.runs");
+            if (runs != null)
             {
-                string xPath = String.Format($"message.runs.{i.ToString()}.text");
-                liveChatTextMessageRenderer.message.simpleText += Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, xPath, ""));
+                for (int i = 0; i < runs.Count; i++)
+                {
+                    string xPath = String.Format($"message.runs.{i.ToString()}.text");
+                    liveChatTextMessageRenderer.message.simpleText += Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, xPath, ""));
+                }
             }
+            else
+                liveChatTextMessageRenderer.message.simpleText = "";
 
             var authorBadges = JsonHelper.TryGetValueByXPath(txtMsgRd, "authorBadges", null);
             if (authorBadges != null)
@@ -448,7 +454,6 @@ namespace KomeTube.Kernel
                     liveChatTextMessageRenderer.authorBadges.Add(badge);
                 }
             }
-            //liveChatTextMessageRenderer.contextMenuEndpoint
         }
 
         /// <summary>
