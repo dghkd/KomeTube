@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using KomeTube.ViewModel;
+
 namespace KomeTube.View.Component
 {
     /// <summary>
@@ -25,6 +26,5 @@ namespace KomeTube.View.Component
         {
             InitializeComponent();
         }
-        
     }
 }

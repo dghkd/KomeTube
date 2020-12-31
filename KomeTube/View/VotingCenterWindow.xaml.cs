@@ -23,11 +23,13 @@ namespace KomeTube.View
     public partial class VotingCenterWindow : Window
     {
         #region Private Member
-        private VotingCenterVM _vm;
-        #endregion
 
+        private VotingCenterVM _vm;
+
+        #endregion Private Member
 
         #region Constructor
+
         public VotingCenterWindow(VotingCenterVM vm)
         {
             InitializeComponent();
@@ -38,10 +40,11 @@ namespace KomeTube.View
             this.DataContext = _vm;
             LV_Candidates.ItemsSource = _vm.VoteCandidateColle;
         }
-        #endregion
 
+        #endregion Constructor
 
         #region Event Handle
+
         private void On_Closed(object sender, EventArgs e)
         {
             _vm.Close();
@@ -54,6 +57,7 @@ namespace KomeTube.View
                 case VotingCenterVM.CmdKey_Start:
                     _vm.Start();
                     break;
+
                 case VotingCenterVM.CmdKey_Stop:
                     _vm.Stop();
                     break;
@@ -63,6 +67,7 @@ namespace KomeTube.View
             }
             return true;
         }
-        #endregion
+
+        #endregion Event Handle
     }
 }

@@ -10,11 +10,13 @@ using System.Windows.Data;
 
 using KomeTube.Common;
 using KomeTube.View;
+
 namespace KomeTube.ViewModel
 {
     public class PuzzleCenterVM : ViewModelBase
     {
         #region Private Member
+
         private bool _isStarted;
         private DateTime _startTime;
         private TimeSpan _elapsedTime;
@@ -23,10 +25,11 @@ namespace KomeTube.ViewModel
 
         private ObservableCollection<PuzzleAnswerVM> _ansColle;
         private object _lockAnsColleObj;
-        #endregion
 
+        #endregion Private Member
 
         #region Constructor
+
         public PuzzleCenterVM()
         {
             _lockAnsColleObj = new object();
@@ -35,10 +38,11 @@ namespace KomeTube.ViewModel
             this.AnsColle = CollectionViewSource.GetDefaultView(_ansColle);
             BindingOperations.EnableCollectionSynchronization(_ansColle, _lockAnsColleObj);
         }
-        #endregion
 
+        #endregion Constructor
 
         #region Public Member
+
         /// <summary>
         /// 取得或設定開始時間
         /// </summary>
@@ -111,12 +115,14 @@ namespace KomeTube.ViewModel
             get;
             private set;
         }
-        #endregion
 
+        #endregion Public Member
 
         #region Command
+
         public const string CmdKey_Start = "CmdKey_Start";
         private CommandBase _cmdStart;
+
         public CommandBase CmdStart
         {
             get
@@ -127,6 +133,7 @@ namespace KomeTube.ViewModel
 
         public const string CmdKey_Stop = "CmdKey_Stop";
         private CommandBase _cmdStop;
+
         public CommandBase CmdStop
         {
             get
@@ -137,6 +144,7 @@ namespace KomeTube.ViewModel
 
         public const string CmdKey_AddAnswer = "CmdKey_AddAnswer";
         private CommandBase _cmdAddAnswer;
+
         public CommandBase CmdAddAnswer
         {
             get
@@ -144,7 +152,6 @@ namespace KomeTube.ViewModel
                 return _cmdAddAnswer ?? (_cmdAddAnswer = new CommandBase(x => ExecuteCommand(CmdKey_AddAnswer)));
             }
         }
-
 
         public Func<String, PuzzleCenterVM, bool> CommandAction;
 
@@ -155,10 +162,11 @@ namespace KomeTube.ViewModel
                 this.CommandAction(cmd, this);
             }
         }
-        #endregion
 
+        #endregion Command
 
         #region Public Method
+
         /// <summary>
         /// 開始接收猜謎訊息
         /// </summary>
@@ -249,8 +257,8 @@ namespace KomeTube.ViewModel
 
             return false;
         }
-        #endregion
 
+        #endregion Public Method
 
         #region Event Handle
 
@@ -261,6 +269,6 @@ namespace KomeTube.ViewModel
             _timerElapseTime.Change(1000, Timeout.Infinite);
         }
 
-        #endregion
+        #endregion Event Handle
     }
 }

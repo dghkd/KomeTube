@@ -24,37 +24,39 @@ namespace KomeTube.View.Component
         private String _textInput;
 
         #region Dependency Property
+
         public static readonly DependencyProperty MaxValueProperty = DependencyProperty.Register("MaxValue", typeof(double), typeof(NumericTextBox), new PropertyMetadata((double)0));
         public static readonly DependencyProperty MinValueProperty = DependencyProperty.Register("MinValue", typeof(double), typeof(NumericTextBox), new PropertyMetadata((double)0));
 
-
-        #endregion
-
+        #endregion Dependency Property
 
         #region Constructor
+
         public NumericTextBox()
         {
             InitializeComponent();
-
         }
-        #endregion
 
+        #endregion Constructor
 
         #region Property
+
         public double MaxValue
         {
             get { return (double)this.GetValue(MaxValueProperty); }
             set { this.SetValue(MaxValueProperty, value); }
         }
+
         public double MinValue
         {
             get { return (double)this.GetValue(MinValueProperty); }
             set { this.SetValue(MinValueProperty, value); }
         }
-        #endregion
 
+        #endregion Property
 
         #region Event
+
         private void On_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             this.SelectAll();
@@ -84,7 +86,6 @@ namespace KomeTube.View.Component
                 value = this.MinValue;
             }
             this.Text = String.Format("{0}", value);
-
         }
 
         private void OnPreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -139,16 +140,17 @@ namespace KomeTube.View.Component
                 this.SelectAll();
             }
         }
-        #endregion
 
+        #endregion Event
 
         #region Private Function
+
         private bool IsTextAllowed(String text)
         {
             Regex regex = new Regex("[^0-9.-]+"); //regex that matches disallowed text
             return !regex.IsMatch(text);
         }
-        #endregion
 
+        #endregion Private Function
     }
 }

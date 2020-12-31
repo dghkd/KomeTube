@@ -24,19 +24,22 @@ namespace KomeTube.View.Component
     public partial class VoteCandidateView : UserControl
     {
         #region Private Member
-        private VoteCandidateVM _vm;
-        #endregion
 
+        private VoteCandidateVM _vm;
+
+        #endregion Private Member
 
         #region Constructor
+
         public VoteCandidateView()
         {
             InitializeComponent();
         }
-        #endregion
-        
+
+        #endregion Constructor
 
         #region Event Handle
+
         private void On_Loaded(object sender, RoutedEventArgs e)
         {
             _vm = this.DataContext as VoteCandidateVM;
@@ -87,15 +90,17 @@ namespace KomeTube.View.Component
                     NameListWindow wnd = new NameListWindow(sender.VoterColle);
                     wnd.ShowDialog();
                     break;
+
                 default:
                     break;
             }
             return true;
         }
-        #endregion
 
+        #endregion Event Handle
 
         #region Private Method
+
         private BitmapImage LoadImage(String path)
         {
             if (!System.IO.File.Exists(path))
@@ -122,6 +127,7 @@ namespace KomeTube.View.Component
             image.Freeze();
             return image;
         }
-        #endregion
+
+        #endregion Private Method
     }
 }

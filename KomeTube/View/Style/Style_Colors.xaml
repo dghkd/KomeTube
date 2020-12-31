@@ -2,37 +2,37 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:KomeTube.View.Style">
 
-    <SolidColorBrush x:Key="Main.Window.Background"
-                     Color="#FF252526"></SolidColorBrush>
+    <SolidColorBrush x:Key="Main.Window.Background" Color="#FF252526">
+    </SolidColorBrush>
 
-    <SolidColorBrush x:Key="Main.DataGrid.Background"
-                     Color="#FF252526"></SolidColorBrush>
-    <SolidColorBrush x:Key="Main.DataGrid.Foreground"
-                     Color="#FFFFFFEE"></SolidColorBrush>
-    <SolidColorBrush x:Key="Main.DataGrid.Row.Selected"
-                     Color="#FF3e3e42"></SolidColorBrush>
-    <SolidColorBrush x:Key="Main.DataGrid.Row.MouseOver"
-                     Color="#FF3e3e42"></SolidColorBrush>
+    <SolidColorBrush x:Key="Main.DataGrid.Background" Color="#FF252526">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="Main.DataGrid.Foreground" Color="#FFFFFFEE">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="Main.DataGrid.Row.Selected" Color="#FF3e3e42">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="Main.DataGrid.Row.MouseOver" Color="#FF3e3e42">
+    </SolidColorBrush>
 
-    <SolidColorBrush x:Key="VotingCenter.Title.Background"
-                     Color="#FF252526"></SolidColorBrush>
-    <SolidColorBrush x:Key="VotingCenter.Title.Foreground"
-                     Color="#FFFFFFEE"></SolidColorBrush>
-    <SolidColorBrush x:Key="VotingCenter.Title.Background.Translucent"
-                     Color="#AFFFFFEE"></SolidColorBrush>
-    <SolidColorBrush x:Key="VoteCandidate.Candidate.Background"
-                     Color="#FF3e3e42"></SolidColorBrush>
-    <SolidColorBrush x:Key="VoteCandidate.Candidate.Background.Translucent"
-                     Color="#AFF0E0D6"></SolidColorBrush>
-    <SolidColorBrush x:Key="VoteCandidate.Candidate.Foreground"
-                     Color="#FFFFFFEE"></SolidColorBrush>
+    <SolidColorBrush x:Key="VotingCenter.Title.Background" Color="#FF252526">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="VotingCenter.Title.Foreground" Color="#FFFFFFEE">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="VotingCenter.Title.Background.Translucent" Color="#AFFFFFEE">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="VoteCandidate.Candidate.Background" Color="#FF3e3e42">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="VoteCandidate.Candidate.Background.Translucent" Color="#AFF0E0D6">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="VoteCandidate.Candidate.Foreground" Color="#FFFFFFEE">
+    </SolidColorBrush>
 
-    <SolidColorBrush x:Key="PuzzleCenter.AnswerList.Background"
-                     Color="#FF252526"></SolidColorBrush>
-    <SolidColorBrush x:Key="PuzzleCenter.AnswerList.Foreground"
-                     Color="#FFFFFFEE"></SolidColorBrush>
-    <SolidColorBrush x:Key="PuzzleAnswer.Answer.Background"
-                     Color="#FF3e3e42"></SolidColorBrush>
-    <SolidColorBrush x:Key="PuzzleAnswer.Answer.Foreground"
-                     Color="#FFFFFFEE"></SolidColorBrush>
+    <SolidColorBrush x:Key="PuzzleCenter.AnswerList.Background" Color="#FF252526">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="PuzzleCenter.AnswerList.Foreground" Color="#FFFFFFEE">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="PuzzleAnswer.Answer.Background" Color="#FF3e3e42">
+    </SolidColorBrush>
+    <SolidColorBrush x:Key="PuzzleAnswer.Answer.Foreground" Color="#FFFFFFEE">
+    </SolidColorBrush>
 </ResourceDictionary>

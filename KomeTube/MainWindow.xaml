@@ -2,16 +2,16 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KomeTube"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Icon="View/Image/icon_logo.ico"
         Title="KomeTube"
-        Height="350"
         Width="620"
-        MinHeight="350"
+        Height="350"
         MinWidth="620"
+        MinHeight="350"
         Background="{StaticResource Main.Window.Background}"
+        Icon="View/Image/icon_logo.ico"
         WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -22,55 +22,54 @@
         </Grid.RowDefinitions>
 
         <TextBox x:Name="TXTBOX_Url"
-                 Text="{Binding VideoUrl}"
-                 Margin="10,10,0,0"
-                 Height="23"
                  Width="320"
+                 Height="23"
+                 Margin="10,10,0,0"
                  HorizontalAlignment="Left"
                  VerticalAlignment="Top"
-                 VerticalContentAlignment="Center" />
+                 VerticalContentAlignment="Center"
+                 Text="{Binding VideoUrl}" />
 
         <Button x:Name="BTN_Start"
-                Margin="340,10,0,0"
                 Width="75"
+                Margin="340,10,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top">
             <Button.Style>
                 <Style TargetType="Button">
-                    <Setter Property="Command"
-                            Value="{Binding CmdStart}"></Setter>
-                    <Setter Property="Content"
-                            Value="開始"></Setter>
+                    <Setter Property="Command" Value="{Binding CmdStart}">
+                    </Setter>
+                    <Setter Property="Content" Value="開始">
+                    </Setter>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsStopped}"
-                                     Value="False">
-                            <Setter Property="Content"
-                                    Value="停止"></Setter>
-                            <Setter Property="Command"
-                                    Value="{Binding CmdStop}"></Setter>
-                            <Setter Property="IsEnabled"
-                                    Value="{Binding IsEnableStop}"></Setter>
+                        <DataTrigger Binding="{Binding IsStopped}" Value="False">
+                            <Setter Property="Content" Value="停止">
+                            </Setter>
+                            <Setter Property="Command" Value="{Binding CmdStop}">
+                            </Setter>
+                            <Setter Property="IsEnabled" Value="{Binding IsEnableStop}">
+                            </Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Button.Style>
         </Button>
 
-        <StackPanel Orientation="Horizontal"
-                    Margin="0,10,10,0"
+        <StackPanel Margin="0,10,10,0"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Top">
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
 
             <Button x:Name="BTN_Puzzle"
+                    Width="75"
                     Command="{Binding CmdPuzzle}"
-                    Content="猜謎"
-                    Width="75" />
+                    Content="猜謎" />
 
             <Button x:Name="BTN_Vote"
+                    Width="75"
                     Margin="10,0,0,0"
                     Command="{Binding CmdVote}"
-                    Content="投票"
-                    Width="75" />
+                    Content="投票" />
         </StackPanel>
 
         <Grid Grid.Row="1">
@@ -78,112 +77,110 @@
                        Fill="{StaticResource Main.Window.Background}"
                        MouseLeftButtonUp="On_Rectangle_MouseLeftButtonUp" />
 
-            <StackPanel Orientation="Horizontal"
+            <StackPanel Margin="10,0,0,0"
                         VerticalAlignment="Center"
-                        Margin="10,0,0,0">
+                        Orientation="Horizontal">
 
                 <TextBox x:Name="TXT_Status"
-                         Text="{Binding StatusText}"
-                         ToolTip="{Binding ErrorText}"
                          MinWidth="150"
-                         TextWrapping="Wrap"
-                         IsReadOnly="True"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
                          Background="Transparent"
                          Foreground="Gray"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Top" />
+                         IsReadOnly="True"
+                         Text="{Binding StatusText}"
+                         TextWrapping="Wrap"
+                         ToolTip="{Binding ErrorText}" />
 
-                <TextBlock Text="留言總數:"
-                           Margin="12,0,0,0"
+                <TextBlock Margin="12,0,0,0"
+                           VerticalAlignment="Center"
                            Foreground="{StaticResource Main.DataGrid.Foreground}"
-                           VerticalAlignment="Center"></TextBlock>
-                <TextBlock Text="{Binding TotalCommentCount}"
-                           Margin="2,0,0,0"
+                           Text="留言總數:">
+                </TextBlock>
+                <TextBlock Margin="2,0,0,0"
+                           VerticalAlignment="Center"
                            Foreground="{StaticResource Main.DataGrid.Foreground}"
-                           VerticalAlignment="Center"></TextBlock>
+                           Text="{Binding TotalCommentCount}">
+                </TextBlock>
 
                 <TextBlock Margin="15,0,0,0"
                            VerticalAlignment="Center"
                            Foreground="{StaticResource Main.DataGrid.Foreground}"
-                           Text="留言人數:"></TextBlock>
-                <TextBlock Text="{Binding TotalAuthorCount}"
-                           Margin="2,0,0,0"
+                           Text="留言人數:">
+                </TextBlock>
+                <TextBlock Margin="2,0,0,0"
+                           VerticalAlignment="Center"
                            Foreground="{StaticResource Main.DataGrid.Foreground}"
-                           VerticalAlignment="Center"></TextBlock>
+                           Text="{Binding TotalAuthorCount}">
+                </TextBlock>
             </StackPanel>
 
-            <Button Content="匯出留言"
-                    Command="{Binding CmdExportComment}"
+            <Button Width="75"
+                    Margin="0,0,10,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Margin="0,0,10,0"
-                    Width="75"></Button>
+                    Command="{Binding CmdExportComment}"
+                    Content="匯出留言">
+            </Button>
         </Grid>
 
         <Grid Grid.Row="2">
-            <DataGrid x:Name="DG_Comments"
-                      Style="{StaticResource CommentDataGridStyle}">
+            <DataGrid x:Name="DG_Comments" Style="{StaticResource CommentDataGridStyle}">
                 <DataGrid.Resources>
-                    <Style TargetType="{x:Type DataGridCell}"
-                           BasedOn="{StaticResource DataGridCellStyle_Custom}" />
-                    <Style TargetType="{x:Type DataGridRow}"
-                           BasedOn="{StaticResource DataGridRowStyle}" />
+                    <Style BasedOn="{StaticResource DataGridCellStyle_Custom}" TargetType="{x:Type DataGridCell}" />
+                    <Style BasedOn="{StaticResource DataGridRowStyle}" TargetType="{x:Type DataGridRow}" />
                 </DataGrid.Resources>
                 <DataGrid.Columns>
 
-                    <DataGridTemplateColumn Header="Time"
-                                            Width="60">
+                    <DataGridTemplateColumn Width="60" Header="Time">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding DateTimeText}"
-                                           Foreground="{StaticResource Main.DataGrid.Foreground}"></TextBlock>
+                                <TextBlock Foreground="{StaticResource Main.DataGrid.Foreground}" Text="{Binding DateTimeText}">
+                                </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header=""
-                                            Width="36">
+                    <DataGridTemplateColumn Width="36" Header="">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding AuthorPhotoUrl}"
-                                       Margin="2"></Image>
+                                <Image Margin="2" Source="{Binding AuthorPhotoUrl}">
+                                </Image>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Name"
-                                            Width="120">
+                    <DataGridTemplateColumn Width="120" Header="Name">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <TextBox Text="{Binding AuthorName, Mode=OneWay}"
-                                             Background="Transparent"
-                                             Foreground="{StaticResource Main.DataGrid.Foreground}"
+                                    <TextBox Background="Transparent"
                                              BorderThickness="0"
+                                             Foreground="{StaticResource Main.DataGrid.Foreground}"
                                              IsReadOnly="True"
+                                             Text="{Binding AuthorName, Mode=OneWay}"
                                              TextWrapping="Wrap" />
-                                    <TextBox Text="{Binding AuthorBadges, Mode=OneWay}"
-                                             Background="Transparent"
-                                             Foreground="{StaticResource Main.DataGrid.Foreground}"
-                                             BorderThickness="0"
-                                             Margin="3,0,0,0"
+                                    <TextBox Margin="3,0,0,0"
                                              VerticalAlignment="Center"
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             Foreground="{StaticResource Main.DataGrid.Foreground}"
                                              IsReadOnly="True"
+                                             Text="{Binding AuthorBadges, Mode=OneWay}"
                                              TextWrapping="Wrap" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Message"
-                                            Width="*">
+                    <DataGridTemplateColumn Width="*" Header="Message">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding Message, Mode=OneWay}"
-                                         Background="Transparent"
-                                         Foreground="{StaticResource Main.DataGrid.Foreground}"
+                                <TextBox Background="Transparent"
                                          BorderThickness="0"
+                                         Foreground="{StaticResource Main.DataGrid.Foreground}"
                                          IsReadOnly="True"
+                                         Text="{Binding Message, Mode=OneWay}"
                                          TextWrapping="Wrap" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

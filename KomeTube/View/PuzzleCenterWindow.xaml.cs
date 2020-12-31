@@ -22,11 +22,13 @@ namespace KomeTube.View
     public partial class PuzzleCenterWindow : Window
     {
         #region Private Member
-        private PuzzleCenterVM _vm;
-        #endregion
 
+        private PuzzleCenterVM _vm;
+
+        #endregion Private Member
 
         #region Constructor
+
         public PuzzleCenterWindow(PuzzleCenterVM vm)
         {
             InitializeComponent();
@@ -36,8 +38,8 @@ namespace KomeTube.View
             this.DataContext = _vm;
             LV_Answer.ItemsSource = _vm.AnsColle;
         }
-        #endregion
 
+        #endregion Constructor
 
         #region Event Handle
 
@@ -94,11 +96,13 @@ namespace KomeTube.View
                     dlg.ShowDialog();
 
                     break;
+
                 default:
                     break;
             }
             return true;
         }
-        #endregion
+
+        #endregion Event Handle
     }
 }

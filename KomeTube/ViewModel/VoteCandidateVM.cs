@@ -15,6 +15,7 @@ namespace KomeTube.ViewModel
     public class VoteCandidateVM : ViewModelBase
     {
         #region Private Member
+
         private int _num;
         private String _name;
         private int _count;
@@ -24,10 +25,11 @@ namespace KomeTube.ViewModel
         private bool _isShowStatistic;
         private ObservableCollection<CommentVM> _voterColle;
         private object _lockVoterColleObj;
-        #endregion
 
+        #endregion Private Member
 
         #region Constroctor
+
         public VoteCandidateVM()
         {
             _voterColle = new ObservableCollection<CommentVM>();
@@ -37,10 +39,11 @@ namespace KomeTube.ViewModel
             this.VoterColle = CollectionViewSource.GetDefaultView(_voterColle);
             BindingOperations.EnableCollectionSynchronization(_voterColle, _lockVoterColleObj);
         }
-        #endregion
 
+        #endregion Constroctor
 
         #region Public Member
+
         /// <summary>
         /// 取得或設定編號
         /// </summary>
@@ -113,12 +116,13 @@ namespace KomeTube.ViewModel
             set { _isShowStatistic = value; OnPropertyChanged(nameof(IsShowStatistic)); }
         }
 
-        #endregion
-
+        #endregion Public Member
 
         #region Command
+
         public const string CmdKey_OpenVoterColle = "CmdKey_OpenVoterColle";
         private CommandBase _cmdOpenVoterColle;
+
         public CommandBase CmdOpenVoterColle
         {
             get
@@ -126,7 +130,6 @@ namespace KomeTube.ViewModel
                 return _cmdOpenVoterColle ?? (_cmdOpenVoterColle = new CommandBase(x => ExecuteCommand(CmdKey_OpenVoterColle)));
             }
         }
-
 
         public Func<String, VoteCandidateVM, bool> CommandAction;
 
@@ -137,10 +140,11 @@ namespace KomeTube.ViewModel
                 this.CommandAction(cmd, this);
             }
         }
-        #endregion
 
+        #endregion Command
 
         #region Public Method
+
         /// <summary>
         /// 將投票者加入名單並列入計票
         /// </summary>
@@ -164,6 +168,7 @@ namespace KomeTube.ViewModel
 
             OnPropertyChanged("");
         }
-        #endregion
+
+        #endregion Public Method
     }
 }

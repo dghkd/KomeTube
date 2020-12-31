@@ -8,11 +8,13 @@ using System.ComponentModel;
 using System.Windows.Data;
 
 using KomeTube.Common;
+
 namespace KomeTube.ViewModel
 {
     public class PuzzleAnswerVM : ViewModelBase
     {
         #region Private Member
+
         private String _answer;
         private String _hideAnserText;
         private int _wordLength;
@@ -21,10 +23,11 @@ namespace KomeTube.ViewModel
         private Dictionary<String, CommentVM> _nameTable;
         private ObservableCollection<CommentVM> _nameColle;
         private object _lockNameColleObj;
-        #endregion
 
+        #endregion Private Member
 
         #region Constructor
+
         public PuzzleAnswerVM()
         {
             _nameTable = new Dictionary<string, CommentVM>();
@@ -33,10 +36,11 @@ namespace KomeTube.ViewModel
             this.NameColle = CollectionViewSource.GetDefaultView(_nameColle);
             BindingOperations.EnableCollectionSynchronization(_nameColle, _lockNameColleObj);
         }
-        #endregion
 
+        #endregion Constructor
 
         #region Public Member
+
         /// <summary>
         /// 取得或設定答案
         /// </summary>
@@ -107,12 +111,14 @@ namespace KomeTube.ViewModel
             get;
             private set;
         }
-        #endregion
 
+        #endregion Public Member
 
         #region Command
+
         public const string CmdKey_Remove = "CmdKey_Remove";
         private CommandBase _cmdRemove;
+
         public CommandBase CmdRemove
         {
             get
@@ -123,6 +129,7 @@ namespace KomeTube.ViewModel
 
         public const string CmdKey_OpenNameColle = "CmdKey_OpenNameColle";
         private CommandBase _cmdOpenNameColle;
+
         public CommandBase CmdOpenNameColle
         {
             get
@@ -130,7 +137,6 @@ namespace KomeTube.ViewModel
                 return _cmdOpenNameColle ?? (_cmdOpenNameColle = new CommandBase(x => ExecuteCommand(CmdKey_OpenNameColle)));
             }
         }
-
 
         public Func<String, PuzzleAnswerVM, bool> CommandAction;
 
@@ -141,10 +147,11 @@ namespace KomeTube.ViewModel
                 this.CommandAction(cmd, this);
             }
         }
-        #endregion
 
+        #endregion Command
 
         #region Public Method
+
         /// <summary>
         /// 將留言者加入記名名單中
         /// </summary>
@@ -178,6 +185,7 @@ namespace KomeTube.ViewModel
             _nameTable.Clear();
             this.IsHighLight = false;
         }
-        #endregion
+
+        #endregion Public Method
     }
 }

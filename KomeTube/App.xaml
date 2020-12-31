@@ -6,8 +6,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="View/Style/Style_Colors.xaml"/>
-                <ResourceDictionary Source="View/Style/Style_CommentDataGrid.xaml"/>
+                <ResourceDictionary Source="View/Style/Style_Colors.xaml" />
+                <ResourceDictionary Source="View/Style/Style_CommentDataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

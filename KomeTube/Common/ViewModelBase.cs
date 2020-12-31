@@ -13,7 +13,7 @@ namespace KomeTube.Common
 
         private readonly Dictionary<String, PropertyChangedEventArgs> _cacheEventArgs;
 
-        #endregion
+        #endregion Private Properties
 
         #region Constructor
 
@@ -22,7 +22,7 @@ namespace KomeTube.Common
             _cacheEventArgs = new Dictionary<String, PropertyChangedEventArgs>();
         }
 
-        #endregion
+        #endregion Constructor
 
         #region INotifyPropertyChanged Members
 
@@ -47,6 +47,6 @@ namespace KomeTube.Common
                 handler(this, args);
         }
 
-        #endregion
+        #endregion INotifyPropertyChanged Members
     }
 }

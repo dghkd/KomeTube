@@ -1,22 +1,23 @@
 ﻿<UserControl x:Class="KomeTube.View.Component.VoteCandidateView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:KomeTube.View.Component"
-             mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="200"
-             MinHeight="200" MinWidth="200"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             MinWidth="200"
+             MinHeight="200"
+             d:DesignHeight="200"
+             d:DesignWidth="200"
              Background="{StaticResource VoteCandidate.Candidate.Background}"
              BorderBrush="Gray"
              BorderThickness="1"
-             Loaded="On_Loaded"
-             >
-    
+             Loaded="On_Loaded">
+
     <Grid Margin="5,5,5,10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="85"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="85" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -25,37 +26,40 @@
                        VerticalAlignment="Top"
                        FontSize="22"
                        Foreground="{StaticResource VoteCandidate.Candidate.Foreground}">
-            <Run Text="{Binding Num}"></Run>
-            <Run Text="."></Run>
+                <Run Text="{Binding Num}">
+                </Run>
+                <Run Text=".">
+                </Run>
             </TextBlock>
 
             <TextBlock Margin="5,25,5,5"
-                       Text="請輸入標題"
-                       FontSize="22"
-                       TextWrapping="Wrap"
-                       Foreground="{StaticResource VoteCandidate.Candidate.Foreground}"
-                       Background="Transparent"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       >
+                       Background="Transparent"
+                       FontSize="22"
+                       Foreground="{StaticResource VoteCandidate.Candidate.Foreground}"
+                       Text="請輸入標題"
+                       TextWrapping="Wrap">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
-                        <Setter Property="Visibility" Value="Hidden"></Setter>
+                        <Setter Property="Visibility" Value="Hidden">
+                        </Setter>
                         <Style.Triggers>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding ImageObject}" Value="{x:Null}"/>
-                                    <Condition Binding="{Binding Text, ElementName=TXT_Name}" Value=""/>
+                                    <Condition Binding="{Binding ImageObject}" Value="{x:Null}" />
+                                    <Condition Binding="{Binding Text, ElementName=TXT_Name}" Value="" />
                                 </MultiDataTrigger.Conditions>
                                 <MultiDataTrigger.Setters>
-                                    <Setter Property="Visibility" Value="Visible"></Setter>
+                                    <Setter Property="Visibility" Value="Visible">
+                                    </Setter>
                                 </MultiDataTrigger.Setters>
                             </MultiDataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            
+
             <Image x:Name="IMG_Image"
                    Margin="5,25,5,5"
                    Source="{Binding ImageObject}">
@@ -63,85 +67,90 @@
 
             <TextBox x:Name="TXT_Name"
                      Margin="5,25,5,5"
-                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                     IsReadOnly="{Binding IsReadOnly}"
-                     Foreground="{StaticResource VoteCandidate.Candidate.Foreground}"
-                     FontSize="22"
-                     AcceptsReturn="True"
-                     TextWrapping="Wrap"
-                     BorderThickness="0"
                      HorizontalContentAlignment="Center"
                      VerticalContentAlignment="Center"
+                     AcceptsReturn="True"
                      AllowDrop="True"
-                     PreviewDragOver="On_TXT_Name_PreviewDragOver"
+                     BorderThickness="0"
                      Drop="On_TXT_Name_Drop"
+                     FontSize="22"
+                     Foreground="{StaticResource VoteCandidate.Candidate.Foreground}"
+                     IsReadOnly="{Binding IsReadOnly}"
                      MouseDoubleClick="On_TXT_Name_MouseDoubleClick"
-                     >
+                     PreviewDragOver="On_TXT_Name_PreviewDragOver"
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     TextWrapping="Wrap">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
-                        <Setter Property="Background" Value="Transparent"></Setter>
+                        <Setter Property="Background" Value="Transparent">
+                        </Setter>
                         <Style.Triggers>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding ImageObject}" Value="{x:Null}"/>
-                                    <Condition Binding="{Binding Name}" Value=""/>
+                                    <Condition Binding="{Binding ImageObject}" Value="{x:Null}" />
+                                    <Condition Binding="{Binding Name}" Value="" />
                                 </MultiDataTrigger.Conditions>
                                 <MultiDataTrigger.Setters>
-                                    <Setter Property="Background" Value="{StaticResource VoteCandidate.Candidate.Background.Translucent}"></Setter>
+                                    <Setter Property="Background" Value="{StaticResource VoteCandidate.Candidate.Background.Translucent}">
+                                    </Setter>
                                 </MultiDataTrigger.Setters>
                             </MultiDataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TextBox.Style>
-
             </TextBox>
         </Grid>
 
         <Grid Grid.Row="1">
-            <StackPanel Orientation="Vertical"
-                        VerticalAlignment="Bottom">
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="票數:"
+            <StackPanel VerticalAlignment="Bottom" Orientation="Vertical">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock FontSize="14"
                                Foreground="{StaticResource VoteCandidate.Candidate.Foreground}"
-                               FontSize="14"></TextBlock>
+                               Text="票數:">
+                    </TextBlock>
                     <TextBlock Margin="10,0,0,0"
-                               Foreground="{StaticResource VoteCandidate.Candidate.Foreground}"
                                FontSize="14"
-                               Text="{Binding Count}"></TextBlock>
+                               Foreground="{StaticResource VoteCandidate.Candidate.Foreground}"
+                               Text="{Binding Count}">
+                    </TextBlock>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="得票率:"
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock FontSize="14"
                                Foreground="{StaticResource VoteCandidate.Candidate.Foreground}"
-                               FontSize="14"></TextBlock>
+                               Text="得票率:">
+                    </TextBlock>
                     <TextBlock Margin="10,0,0,0"
-                               Foreground="{StaticResource VoteCandidate.Candidate.Foreground}"
                                FontSize="14"
-                               >
-                        <Run Text="{Binding Rate, StringFormat={}{0:0.00}}"></Run>
-                        <Run Text="%"></Run>
+                               Foreground="{StaticResource VoteCandidate.Candidate.Foreground}">
+                        <Run Text="{Binding Rate, StringFormat={}{0:0.00}}">
+                        </Run>
+                        <Run Text="%">
+                        </Run>
                     </TextBlock>
                 </StackPanel>
             </StackPanel>
 
             <Button x:Name="BTN_OpenVoterList"
-                    Command="{Binding CmdOpenVoterColle}"
+                    Width="30"
+                    Height="30"
+                    Margin="0,18,0,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Margin="0,18,0,0"
-                    Width="30" Height="30">
-                <Image Source="/View/Image/img_voter_list.png"></Image>
+                    Command="{Binding CmdOpenVoterColle}">
+                <Image Source="/View/Image/img_voter_list.png">
+                </Image>
             </Button>
 
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsShowStatistic}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"></Setter>
+                            <Setter Property="Visibility" Value="Visible">
+                            </Setter>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsShowStatistic}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden"></Setter>
+                            <Setter Property="Visibility" Value="Hidden">
+                            </Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

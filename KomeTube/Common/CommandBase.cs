@@ -7,18 +7,20 @@ using System.Windows.Input;
 
 namespace KomeTube.Common
 {
-
     /// <summary>
     /// The command base used for MVVM design pattern.
     /// </summary>
     public class CommandBase : ICommand
     {
         #region Private Fields
+
         private readonly Action<object> _command;
         private readonly Func<object, bool> _canExecute;
-        #endregion
+
+        #endregion Private Fields
 
         #region Constructor
+
         public CommandBase(Action<object> command, Func<object, bool> canExecute = null)
         {
             if (command == null)
@@ -26,9 +28,11 @@ namespace KomeTube.Common
             _canExecute = canExecute;
             _command = command;
         }
-        #endregion
+
+        #endregion Constructor
 
         #region ICommand Members
+
         public void Execute(object parameter)
         {
             _command(parameter);
@@ -46,6 +50,7 @@ namespace KomeTube.Common
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
-        #endregion
+
+        #endregion ICommand Members
     }
 }
