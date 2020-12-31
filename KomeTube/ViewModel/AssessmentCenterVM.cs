@@ -26,6 +26,7 @@ namespace KomeTube.ViewModel
         private bool _canChangeRateEnable;
         private Dictionary<string, CommentVM> _raterTable;
         private Dictionary<string, int> _raterScoreTable;
+        private ContestantListVM _contestantList;
 
         private BitmapImage _img;
         private string _contestantName;
@@ -61,6 +62,7 @@ namespace KomeTube.ViewModel
         {
             _raterTable = new Dictionary<string, CommentVM>();
             _raterScoreTable = new Dictionary<string, int>();
+            _contestantList = new ContestantListVM();
             //_random = new Random();
 
             _raterColle = new ObservableCollection<CommentVM>();
@@ -257,6 +259,14 @@ namespace KomeTube.ViewModel
             set { _showRaterRowCount = value; OnPropertyChanged(nameof(this.ShowRaterRowCount)); }
         }
 
+        public ContestantListVM ContestantListViewModel
+        {
+            get
+            {
+                return _contestantList;
+            }
+        }
+
         public ICollectionView RaterColle
         {
             get;
@@ -337,9 +347,18 @@ namespace KomeTube.ViewModel
                 _timerElapseTime.Dispose();
                 _timerElapseTime = null;
             }
-
             this.IsStarted = false;
             this.CanChangeRateEnable = true;
+
+            ContestantVM contestant = new ContestantVM();
+            contestant.ImageObject = this.ImageObject;
+            contestant.Name = this.ContestantName;
+            contestant.AverageScore = this.AverageScore;
+            contestant.TotalScore = this.TotalScore;
+            contestant.RaterCount = this.RaterCount;
+            contestant.AddRater(_raterColle);
+
+            _contestantList.AddContestant(contestant);
         }
 
         public void ClearData()
@@ -388,7 +407,9 @@ namespace KomeTube.ViewModel
                 return false;
             }
 
+            //int rateScore = _random.Next(50, 101);
             int rateScore = 0;
+
             if (Int32.TryParse(vm.Message, out rateScore))
             {
                 if (rateScore >= this.MinScore

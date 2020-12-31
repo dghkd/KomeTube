@@ -25,6 +25,7 @@ namespace KomeTube.View
         #region Private Member
 
         private AssessmentCenterVM _vm;
+        private ContestantListWindow _contestantListWnd;
 
         #endregion Private Member
 
@@ -36,6 +37,9 @@ namespace KomeTube.View
             _vm = vm;
             this.DataContext = _vm;
             _vm.CommandAction = On_CommandAction;
+
+            _contestantListWnd = new ContestantListWindow(_vm.ContestantListViewModel);
+            _contestantListWnd.Show();
         }
 
         private bool On_CommandAction(string cmdKey, AssessmentCenterVM sender)
@@ -69,6 +73,7 @@ namespace KomeTube.View
         private void On_Closed(object sender, EventArgs e)
         {
             _vm.Close();
+            _contestantListWnd.Close();
         }
 
         private void On_TXT_ImageMask_PreviewDragOver(object sender, DragEventArgs e)
