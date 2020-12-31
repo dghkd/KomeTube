@@ -1,6 +1,6 @@
 # KomeTube
 讀取Youtube Live聊天室留言  
-提供投票統計、文字猜謎等互動功能  
+提供投票統計、文字猜謎、評分等互動功能  
 
 ![](https://github.com/dghkd/KomeTube/raw/master/preview1.png)
 
