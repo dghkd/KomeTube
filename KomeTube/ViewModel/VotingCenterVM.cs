@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Threading;
 
 using KomeTube.Common;
+using KomeTube.Model;
 
 namespace KomeTube.ViewModel
 {
@@ -24,6 +25,10 @@ namespace KomeTube.ViewModel
         private bool _isShowStatistic;
         private bool _isShowVoterListButton;
         private bool _isShowVoterSlide;
+        private bool _canChangeVote;
+        private bool _changeVoteEnable;
+        private string _maxVoteCountText;
+        private int _maxVoteCount;
         private String _voteTitle;
         private bool _isClosed;
         private ObservableCollection<CommentVM> _allVoteColle;
@@ -31,7 +36,7 @@ namespace KomeTube.ViewModel
         private object _lockAllVoteColleObj = new object();
         private object _lockVoteCandidateColleObj = new object();
         private Timer _timerElapseTime;
-        private Dictionary<String, CommentVM> _voterTable;
+        private VoterTable _voterTable;
 
         #endregion Private Member
 
@@ -48,12 +53,14 @@ namespace KomeTube.ViewModel
 
             this.Column = 2;
             this.Row = 1;
+            this.MaxVoteCountText = "1";
 
             this.IsClosed = false;
             this.IsShowStatistic = true;
             this.IsShowVoterListButton = true;
             this.IsShowVoterSlide = true;
-            _voterTable = new Dictionary<string, CommentVM>();
+            this.ChangeVoteEnable = true;
+            _voterTable = new VoterTable();
         }
 
         #endregion Constructor
@@ -178,6 +185,61 @@ namespace KomeTube.ViewModel
             }
         }
 
+        public bool CanChangeVote
+        {
+            get { return _canChangeVote; }
+            set
+            {
+                _canChangeVote = value;
+                OnPropertyChanged(nameof(this.CanChangeVote));
+                if (_canChangeVote == true)
+                {
+                    this.MaxVoteCountText = "1";
+                }
+            }
+        }
+
+        public bool ChangeVoteEnable
+        {
+            get { return _changeVoteEnable; }
+            set { _changeVoteEnable = value; OnPropertyChanged(nameof(this.ChangeVoteEnable)); }
+        }
+
+        /// <summary>
+        /// 取得或設定投票者每人最多可投票數
+        /// </summary>
+        public string MaxVoteCountText
+        {
+            get { return _maxVoteCountText; }
+            set
+            {
+                int count = 0;
+                if (Int32.TryParse(value, out count))
+                {
+                    _maxVoteCountText = value;
+                    OnPropertyChanged(nameof(this.MaxVoteCountText));
+                    this.MaxVoteCount = count;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 取得投票者每人最多可投票數
+        /// </summary>
+        public int MaxVoteCount
+        {
+            get { return _maxVoteCount; }
+            private set
+            {
+                _maxVoteCount = value;
+                OnPropertyChanged(nameof(this.MaxVoteCount));
+                if (_maxVoteCount != 1)
+                {
+                    this.CanChangeVote = false;
+                }
+            }
+        }
+
         public String VoteTitle
         {
             get { return _voteTitle; }
@@ -276,6 +338,7 @@ namespace KomeTube.ViewModel
                 _voteCandidateColle.Remove(candidate);
             }
 
+            this.ChangeVoteEnable = false;
             this.IsStarted = true;
         }
 
@@ -297,6 +360,7 @@ namespace KomeTube.ViewModel
                 candidate.IsReadOnly = false;
             }
 
+            this.ChangeVoteEnable = true;
             this.IsStarted = false;
         }
 
@@ -328,8 +392,39 @@ namespace KomeTube.ViewModel
             if (Int32.TryParse(vm.Message, out voteNum))
             {
                 //判斷是否已投過票
-                if (_voterTable.ContainsKey(vm.AuthorID))
-                    return false;
+                bool isVoted = _voterTable.IsVoted(vm.AuthorID);
+                if (isVoted)
+                {
+                    if (!this.CanChangeVote)
+                    {
+                        //不允許換票
+                        //判斷投票者是否已投滿票數
+                        if (_voterTable.GetVoterCount(vm.AuthorID) >= this.MaxVoteCount)
+                        {
+                            return false;
+                        }
+                    }
+                    else if (this.CanChangeVote
+                        && this.MaxVoteCount == 1)
+                    {
+                        //允許換票,單票制
+                        //移除舊票
+                        Dictionary<CommentVM, VoteCandidateVM> tickets = _voterTable.GetVoterTicket(vm.AuthorID);
+                        if (tickets != null)
+                        {
+                            VoteCandidateVM candidate = tickets.Values.ElementAt(0);
+                            CommentVM oldVote = tickets.Keys.ElementAt(0);
+                            candidate.RemoveVoter(oldVote);
+                            tickets.Remove(oldVote);
+                            _allVoteColle.Remove(oldVote);
+                        }
+                    }
+                    else if (this.CanChangeVote
+                        && this.MaxVoteCount > 1)
+                    {
+                        //允許換票,多票制
+                    }
+                }
 
                 //計票
                 bool isValidVote = false;
@@ -337,7 +432,7 @@ namespace KomeTube.ViewModel
                 {
                     if (candidate.Num == voteNum)
                     {
-                        _voterTable.Add(vm.AuthorID, vm);
+                        _voterTable.Add(vm, candidate);
                         _allVoteColle.Add(vm);
                         OnPropertyChanged(nameof(this.VoteCount));
 

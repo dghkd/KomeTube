@@ -227,6 +227,12 @@ namespace KomeTube.ViewModel
             _showVoterColle.Remove(vm);
         }
 
+        public void RemoveVoter(CommentVM vm)
+        {
+            _voterColle.Remove(vm);
+            this.Count = _voterColle.Count;
+        }
+
         #endregion Public Method
 
         #region Private Method
