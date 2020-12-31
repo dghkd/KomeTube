@@ -61,7 +61,7 @@ namespace KomeTube.View.Component
                     DependencyProperty.Register("IsClose", typeof(bool), typeof(SlideTextItem), new PropertyMetadata(true, OnIsClosePropertyChanged));
 
         public static readonly DependencyProperty IsSlideFinishedProperty =
-            DependencyProperty.Register("IsSlideFinished", typeof(bool), typeof(SlideTextItem), new PropertyMetadata(false));
+            DependencyProperty.Register("IsSlideFinished", typeof(bool), typeof(SlideTextItem), new PropertyMetadata(false, OnIsSlideFinishedPropertyChanged));
 
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register("Text", typeof(string), typeof(SlideTextItem), new PropertyMetadata(""));
@@ -83,6 +83,19 @@ namespace KomeTube.View.Component
                 {
                     item.Show();
                 }
+            }
+        }
+
+        private static void OnIsSlideFinishedPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            SlideTextItem item = d as SlideTextItem;
+            bool newValue = (bool)e.NewValue;
+            bool oldValue = (bool)e.OldValue;
+
+            if (item != null
+                && newValue != oldValue)
+            {
+                item.IsSlideFinished = newValue;
             }
         }
 
@@ -131,7 +144,13 @@ namespace KomeTube.View.Component
         public bool IsClose
         {
             get { return (bool)GetValue(IsCloseProperty); }
-            set { SetValue(IsCloseProperty, value); }
+            set
+            {
+                if (value != this.IsClose)
+                {
+                    SetValue(IsCloseProperty, value);
+                }
+            }
         }
 
         /// <summary>
@@ -140,7 +159,13 @@ namespace KomeTube.View.Component
         public bool IsSlideFinished
         {
             get { return (bool)GetValue(IsSlideFinishedProperty); }
-            set { SetValue(IsSlideFinishedProperty, value); }
+            set
+            {
+                if (value != this.IsSlideFinished)
+                {
+                    SetValue(IsSlideFinishedProperty, value);
+                }
+            }
         }
 
         #endregion Public Member

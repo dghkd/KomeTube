@@ -120,7 +120,7 @@ namespace KomeTube
                     break;
 
                 case MainWindowVM.CmdKey_Vote:
-                    VotingCenterVM votingCenter = sender.GetVotingCenter();
+                    VotingCenterVM votingCenter = sender.CreateVotingCenter();
                     if (votingCenter == null)
                         return false;
 
@@ -132,7 +132,7 @@ namespace KomeTube
                     break;
 
                 case MainWindowVM.CmdKey_Puzzle:
-                    PuzzleCenterVM puzzleCenter = sender.GetPuzzleCenter();
+                    PuzzleCenterVM puzzleCenter = sender.CreatePuzzleCenter();
                     if (puzzleCenter == null)
                         return false;
 
@@ -140,6 +140,17 @@ namespace KomeTube
                     puzzleWnd.Owner = this;
                     puzzleWnd.Closed += (s, e) => { this.Activate(); };
                     puzzleWnd.Show();
+                    break;
+
+                case nameof(sender.CmdAssessment):
+                    AssessmentCenterVM assessmentCenter = sender.CreateAssessmentCenter();
+                    if (assessmentCenter == null)
+                        return false;
+
+                    AssessmentCenterWindow assessmentWnd = new AssessmentCenterWindow(assessmentCenter);
+                    assessmentWnd.Owner = this;
+                    assessmentWnd.Closed += (s, e) => { this.Activate(); };
+                    assessmentWnd.Show();
                     break;
 
                 case MainWindowVM.CmdKey_ExportComment:

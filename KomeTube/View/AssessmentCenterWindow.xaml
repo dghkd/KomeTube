@@ -1,0 +1,407 @@
+﻿<Window x:Class="KomeTube.View.AssessmentCenterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:component="clr-namespace:KomeTube.View.Component"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:KomeTube.View"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="評分"
+        Width="400"
+        Background="{StaticResource Main.Window.Background}"
+        Closed="On_Closed"
+        Icon="Image/icon_logo.ico"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource AssessmentCenter.Foreground}" />
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource AssessmentCenter.Foreground}" />
+            <Setter Property="Margin" Value="0,0,0,2" />
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="GD_Root">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="125" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="210" />
+                <ColumnDefinition Width="*" MinWidth="190" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="10,10,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                <TextBlock Text="開始時間:">
+                </TextBlock>
+                <TextBlock Margin="3,0,0,0" Text="{Binding StartTimeText}">
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Margin="10,30,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                <TextBlock Text="經過時間:">
+                </TextBlock>
+                <TextBlock Margin="3,0,0,0" Text="{Binding ElapsedTimeText}">
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Margin="10,55,0,0" Orientation="Vertical">
+
+                <CheckBox x:Name="CHB_ShowIntroduction"
+                          Content="顯示簡介欄"
+                          IsChecked="{Binding IsShowIntroduction}">
+                </CheckBox>
+
+                <CheckBox x:Name="CHB_ShowTotalScore"
+                          Content="顯示總分"
+                          IsChecked="{Binding IsShowTotalScore}">
+                </CheckBox>
+
+                <CheckBox x:Name="CHB_ShowAverageScore"
+                          Content="顯示平均"
+                          IsChecked="{Binding IsShowAverageScore}">
+                </CheckBox>
+
+                <CheckBox x:Name="CHB_ShowRaterCount"
+                          Content="顯示人數"
+                          IsChecked="{Binding IsShowRaterCount}">
+                </CheckBox>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                        Margin="0,10,0,0"
+                        Orientation="Vertical">
+                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="分數範圍:" />
+                    <component:NumericTextBox x:Name="TXTBOX_MinScore"
+                                              Width="30"
+                                              Margin="3,0"
+                                              HorizontalContentAlignment="Right"
+                                              IsReadOnly="{Binding IsStarted}"
+                                              MaxValue="999"
+                                              MinValue="-999"
+                                              Text="{Binding MinScore, UpdateSourceTrigger=PropertyChanged}">
+                    </component:NumericTextBox>
+                    <TextBlock Text="~" />
+                    <component:NumericTextBox x:Name="TXTBOX_MaxScore"
+                                              Width="30"
+                                              Margin="2,0"
+                                              HorizontalContentAlignment="Right"
+                                              IsReadOnly="{Binding IsStarted}"
+                                              MaxValue="999"
+                                              MinValue="-999"
+                                              Text="{Binding MaxScore, UpdateSourceTrigger=PropertyChanged}">
+                    </component:NumericTextBox>
+                </StackPanel>
+
+                <CheckBox x:Name="CHB_CanChangeRate"
+                          Content="允許重新評分"
+                          IsChecked="{Binding CanChangeRate}"
+                          IsEnabled="{Binding CanChangeRateEnable}">
+                </CheckBox>
+                <CheckBox x:Name="CHB_ShowRaterName"
+                          Content="顯示評分者名稱"
+                          IsChecked="{Binding IsShowRaterName}">
+                </CheckBox>
+                <CheckBox x:Name="CHB_ShowSpecialRateButton"
+                          Content="顯示加分按鈕"
+                          IsChecked="{Binding IsShowSpecialRateButton}"
+                          Visibility="Collapsed">
+                </CheckBox>
+                <CheckBox x:Name="CHB_ShowVoterListButton"
+                          Content="顯示評分者列表按鈕"
+                          IsChecked="{Binding IsShowRaterListButton}" />
+
+                <!--  Start/Stop  -->
+                <Button x:Name="BTN_Start"
+                        Width="75"
+                        Margin="2,20,0,5"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Content" Value="開始">
+                            </Setter>
+                            <Setter Property="Command" Value="{Binding CmdStart}">
+                            </Setter>
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsStarted}" Value="True">
+                                    <Setter Property="Content" Value="停止">
+                                    </Setter>
+                                    <Setter Property="Command" Value="{Binding CmdStop}">
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!--  Contestant Content  -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.ColumnSpan="4"
+                       Height="1"
+                       VerticalAlignment="Top"
+                       Fill="Gray">
+            </Rectangle>
+
+            <StackPanel Margin="5,10,5,0" Orientation="Vertical">
+                <Border x:Name="BD_Image"
+                        MinWidth="128"
+                        MinHeight="128"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        BorderBrush="Gray"
+                        BorderThickness="1">
+                    <Grid>
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Background="Transparent"
+                                   FontSize="12"
+                                   Foreground="{StaticResource AssessmentCenter.Foreground}"
+                                   Text="請放入圖片"
+                                   TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Hidden">
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding ImageObject}" Value="{x:Null}" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Visibility" Value="Visible">
+                                                </Setter>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <Image x:Name="IMG_Image" Source="{Binding ImageObject}" />
+                        <TextBox x:Name="TXT_ImageMask"
+                                 AllowDrop="True"
+                                 BorderThickness="0"
+                                 Drop="On_TXT_ImageMask_Drop"
+                                 IsReadOnly="True"
+                                 MouseDoubleClick="On_TXT_ImageMask_MouseDoubleClick"
+                                 PreviewDragOver="On_TXT_ImageMask_PreviewDragOver">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="Background" Value="Transparent">
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding ImageObject}" Value="{x:Null}" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Background" Value="Transparent" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </Grid>
+                </Border>
+                <TextBox x:Name="TXTBOX_Name"
+                         Width="{Binding ActualWidth, ElementName=BD_Image, Mode=OneWay}"
+                         Margin="0,2,0,5"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Bottom"
+                         HorizontalContentAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         Background="Transparent"
+                         BorderBrush="Gray"
+                         BorderThickness="0,0,0,1"
+                         FontSize="20"
+                         Foreground="{StaticResource AssessmentCenter.Foreground}"
+                         Text="{Binding ContestantName, UpdateSourceTrigger=PropertyChanged}"
+                         TextWrapping="Wrap">
+                </TextBox>
+            </StackPanel>
+
+            <!--  Introduction  -->
+            <TextBox Grid.Column="1"
+                     Width="100"
+                     Margin="0,10,0,22"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     Foreground="{StaticResource AssessmentCenter.Foreground}"
+                     Text="{Binding Introduction}"
+                     TextWrapping="Wrap">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsShowIntroduction}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsShowIntroduction}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <!--  Score  -->
+            <Border Grid.Column="4"
+                    Margin="5,10,5,5"
+                    BorderBrush="Gray"
+                    BorderThickness="1">
+                <Grid x:Name="GD_Score" SizeChanged="On_GD_Score_SizeChanged">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+
+                    <ItemsControl MaxWidth="{Binding ActualWidth, ElementName=GD_Score, Mode=OneWay}" ItemsSource="{Binding ShowRaterColle}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <component:SlideTextItem IsClose="{Binding IsClose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         IsSlideFinished="{Binding IsSlideFinished, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         ShowTime="{Binding ShowTime}"
+                                                         Text="{Binding Text}">
+                                </component:SlideTextItem>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.Style>
+                            <Style TargetType="ItemsControl">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsShowRaterName}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsShowRaterName}" Value="False">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ItemsControl.Style>
+                    </ItemsControl>
+
+                    <StackPanel Margin="10"
+                                VerticalAlignment="Bottom"
+                                Orientation="Vertical">
+                        <DockPanel>
+                            <TextBlock Text="總分:" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       Text="{Binding TotalScore}"
+                                       TextWrapping="Wrap" />
+                            <DockPanel.Style>
+                                <Style TargetType="DockPanel">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsShowTotalScore}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsShowTotalScore}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DockPanel.Style>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="平均:" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       Text="{Binding AverageScore, StringFormat={}{0:0.00}}"
+                                       TextWrapping="Wrap" />
+                            <DockPanel.Style>
+                                <Style TargetType="DockPanel">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsShowAverageScore}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsShowAverageScore}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DockPanel.Style>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="人數:" />
+                            <TextBlock HorizontalAlignment="Right"
+                                       Text="{Binding RaterCount}"
+                                       TextWrapping="Wrap" />
+                            <DockPanel.Style>
+                                <Style TargetType="DockPanel">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsShowRaterCount}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsShowRaterCount}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DockPanel.Style>
+                        </DockPanel>
+                    </StackPanel>
+                    <!--  Special Rate  -->
+                    <Button x:Name="BTN_SpecialRate"
+                            Grid.Row="1"
+                            Command="{Binding CmdSpacialRate}"
+                            Content="加分"
+                            Visibility="Collapsed">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Margin" Value="0,0,31,0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsShowSpecialRateButton}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsShowSpecialRateButton}" Value="False">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsShowRaterListButton}" Value="False">
+                                        <Setter Property="Margin" Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <!--  Rater List  -->
+                    <Button x:Name="BTN_OpenRaterList"
+                            Grid.Row="1"
+                            Width="30"
+                            Height="30"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Command="{Binding CmdOpenRaterColle}">
+                        <Image Source="/View/Image/img_voter_list.png" />
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsShowRaterListButton}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsShowRaterListButton}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

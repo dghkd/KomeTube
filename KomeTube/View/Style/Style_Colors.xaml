@@ -37,4 +37,7 @@
     </SolidColorBrush>
     <SolidColorBrush x:Key="PuzzleAnswer.Answer.Foreground" Color="#FFFFFFEE">
     </SolidColorBrush>
+
+    <SolidColorBrush x:Key="AssessmentCenter.Foreground" Color="#FFFFFFEE">
+    </SolidColorBrush>
 </ResourceDictionary>

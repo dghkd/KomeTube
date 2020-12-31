@@ -7,16 +7,16 @@
         mc:Ignorable="d"
         Title="KomeTube"
         Width="620"
-        Height="350"
+        Height="380"
         MinWidth="620"
-        MinHeight="350"
+        MinHeight="380"
         Background="{StaticResource Main.Window.Background}"
         Icon="View/Image/icon_logo.ico"
         WindowStartupLocation="CenterScreen">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -70,6 +70,17 @@
                     Margin="10,0,0,0"
                     Command="{Binding CmdVote}"
                     Content="投票" />
+        </StackPanel>
+
+        <StackPanel Margin="0,40,10,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+            <Button x:Name="BTN_Assessment"
+                    Width="75"
+                    Margin="10,0,0,0"
+                    Command="{Binding CmdAssessment}"
+                    Content="評分" />
         </StackPanel>
 
         <Grid Grid.Row="1">

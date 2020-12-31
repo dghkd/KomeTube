@@ -42,6 +42,7 @@ namespace KomeTube.ViewModel
 
         private VotingCenterVM _votingCenterVM;
         private PuzzleCenterVM _puzzleCenterVM;
+        private AssessmentCenterVM _assessmentCenterVM;
 
         #endregion Private Member
 
@@ -56,6 +57,7 @@ namespace KomeTube.ViewModel
 
             _votingCenterVM = null;
             _puzzleCenterVM = null;
+            _assessmentCenterVM = null;
             _authorTable = new Dictionary<string, string>();
             _isStopped = true;
 
@@ -190,6 +192,16 @@ namespace KomeTube.ViewModel
             }
         }
 
+        private CommandBase _cmdAssessment;
+
+        public CommandBase CmdAssessment
+        {
+            get
+            {
+                return _cmdAssessment ?? (_cmdAssessment = new CommandBase(x => ExecuteCommand(nameof(this.CmdAssessment)), CanExecuteAssessment));
+            }
+        }
+
         public const string CmdKey_ExportComment = "CmdKey_ExportComment";
         private CommandBase _cmdExportComment;
 
@@ -288,11 +300,11 @@ namespace KomeTube.ViewModel
         }
 
         /// <summary>
-        /// 取得投票所View Model.
-        /// <para>當投票所使用完畢後需要呼叫VotingCenterVM.Close成員方法進行關閉，才能取得新的投票所</para>
+        /// 建立投票所View Model.
+        /// <para>當投票所使用完畢後需要呼叫VotingCenterVM.Close成員方法進行關閉，才能建立新的投票所</para>
         /// </summary>
-        /// <returns>回傳目前可使用的投票所，若投票所尚未關閉則回傳同一個投票所</returns>
-        public VotingCenterVM GetVotingCenter()
+        /// <returns>回傳新的投票所，若投票所尚未關閉則回傳NULL</returns>
+        public VotingCenterVM CreateVotingCenter()
         {
             if (_votingCenterVM == null
                 || _votingCenterVM.IsClosed)
@@ -305,17 +317,34 @@ namespace KomeTube.ViewModel
         }
 
         /// <summary>
-        /// 取得猜謎View Model.
-        /// <para>當猜謎使用完畢後需要呼叫PuzzleCenterVM.Close成員方法進行關閉，才能取得新的猜謎</para>
+        /// 建立猜謎View Model.
+        /// <para>當猜謎使用完畢後需要呼叫PuzzleCenterVM.Close成員方法進行關閉，才能建立新的猜謎</para>
         /// </summary>
-        /// <returns>回傳目前可使用的猜謎，若猜謎尚未關閉則回傳同一個猜謎</returns>
-        public PuzzleCenterVM GetPuzzleCenter()
+        /// <returns>回傳新的猜謎，若猜謎尚未關閉則回傳NULL</returns>
+        public PuzzleCenterVM CreatePuzzleCenter()
         {
             if (_puzzleCenterVM == null
                 || _puzzleCenterVM.IsClosed)
             {
                 _puzzleCenterVM = new PuzzleCenterVM();
                 return _puzzleCenterVM;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 建立評分View Model
+        /// <para>當評分使用完畢後須呼叫AssessmentCenterVM.Close成員方法進行關閉，才能建立新的評分</para>
+        /// </summary>
+        /// <returns>回傳新的評分，若評分尚未關閉則回傳NULL</returns>
+        public AssessmentCenterVM CreateAssessmentCenter()
+        {
+            if (_assessmentCenterVM == null
+                || _assessmentCenterVM.IsClosed == true)
+            {
+                _assessmentCenterVM = new AssessmentCenterVM();
+                return _assessmentCenterVM;
             }
 
             return null;
@@ -339,6 +368,16 @@ namespace KomeTube.ViewModel
         {
             if (_puzzleCenterVM == null
                 || _puzzleCenterVM.IsClosed)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool CanExecuteAssessment(object arg)
+        {
+            if (_assessmentCenterVM == null
+                || _assessmentCenterVM.IsClosed)
             {
                 return true;
             }
@@ -382,6 +421,12 @@ namespace KomeTube.ViewModel
                     if (_puzzleCenterVM != null)
                     {
                         _puzzleCenterVM.Guessing(vm);
+                    }
+
+                    //將留言送至評分中心
+                    if (_assessmentCenterVM != null)
+                    {
+                        _assessmentCenterVM.Rate(vm);
                     }
                 }
             }
