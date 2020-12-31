@@ -23,12 +23,16 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80" />
+            <RowDefinition Height="120" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="210" />
                 <ColumnDefinition Width="*" />
@@ -64,14 +68,14 @@
             </StackPanel>
 
             <TextBlock Grid.Column="1"
-                       Margin="0,10,0,0"
+                       Margin="0.4,10,0,0"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Top"
                        Text="欄位:">
             </TextBlock>
 
             <StackPanel Grid.Column="1"
-                        Margin="0,30,0,0"
+                        Margin="0.4,30,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Orientation="Horizontal">
@@ -106,39 +110,54 @@
                 </component:NumericTextBox>
             </StackPanel>
 
-            <StackPanel Grid.Column="1"
+            <Button x:Name="BTN_Start"
+                    Grid.Column="1"
+                    Width="75"
+                    Margin="100.4,32,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="開始">
+                        </Setter>
+                        <Setter Property="Command" Value="{Binding CmdStart}">
+                        </Setter>
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsStarted}" Value="True">
+                                <Setter Property="Content" Value="停止">
+                                </Setter>
+                                <Setter Property="Command" Value="{Binding CmdStop}">
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <StackPanel Grid.Row="1"
+                        Margin="10,0,0,0"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Bottom"
-                        Orientation="Horizontal">
+                        VerticalAlignment="Top"
+                        Orientation="Vertical">
                 <CheckBox x:Name="CHB_ShowStat"
-                          Margin="0,0,0,5"
+                          Margin="0,0,0,2"
                           VerticalAlignment="Bottom"
                           Content="顯示即時統計"
                           Foreground="{StaticResource VotingCenter.Title.Foreground}"
                           IsChecked="{Binding IsShowStatistic}">
                 </CheckBox>
-
-                <Button x:Name="BTN_Start"
-                        Width="75"
-                        Margin="15,0,10,5">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Content" Value="開始">
-                            </Setter>
-                            <Setter Property="Command" Value="{Binding CmdStart}">
-                            </Setter>
-
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsStarted}" Value="True">
-                                    <Setter Property="Content" Value="停止">
-                                    </Setter>
-                                    <Setter Property="Command" Value="{Binding CmdStop}">
-                                    </Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                <CheckBox x:Name="CHB_ShowVoterListButton"
+                          Margin="0,0,0,2"
+                          Content="顯示投票者列表按鈕"
+                          Foreground="{StaticResource VoteCandidate.Candidate.Foreground}"
+                          IsChecked="{Binding IsShowVoterListButton}" />
+                <CheckBox x:Name="CHB_ShowVoterName"
+                          Margin="0,0,0,2"
+                          Content="顯示投票者名稱"
+                          Foreground="{StaticResource VotingCenter.Title.Foreground}"
+                          IsChecked="{Binding IsShowVoterSlide}">
+                </CheckBox>
             </StackPanel>
         </Grid>
 
@@ -148,9 +167,9 @@
                        Fill="Gray">
             </Rectangle>
 
-            <TextBlock Margin="10,15,10,5"
+            <TextBlock Margin="10,8,10,5"
                        HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
+                       VerticalAlignment="Top"
                        Background="Transparent"
                        FontSize="22"
                        Text="請輸入標題"
@@ -158,7 +177,7 @@
             </TextBlock>
 
             <TextBox x:Name="TXT_VoteTitle"
-                     Margin="10,15,10,5"
+                     Margin="10,8,10,5"
                      HorizontalContentAlignment="Center"
                      AcceptsReturn="True"
                      BorderThickness="0"

@@ -22,6 +22,8 @@ namespace KomeTube.ViewModel
         private int _column;
         private int _row;
         private bool _isShowStatistic;
+        private bool _isShowVoterListButton;
+        private bool _isShowVoterSlide;
         private String _voteTitle;
         private bool _isClosed;
         private ObservableCollection<CommentVM> _allVoteColle;
@@ -49,6 +51,8 @@ namespace KomeTube.ViewModel
 
             this.IsClosed = false;
             this.IsShowStatistic = true;
+            this.IsShowVoterListButton = true;
+            this.IsShowVoterSlide = true;
             _voterTable = new Dictionary<string, CommentVM>();
         }
 
@@ -140,6 +144,36 @@ namespace KomeTube.ViewModel
                 foreach (VoteCandidateVM vm in _voteCandidateColle)
                 {
                     vm.IsShowStatistic = _isShowStatistic;
+                }
+            }
+        }
+
+        public bool IsShowVoterSlide
+        {
+            get { return _isShowVoterSlide; }
+            set
+            {
+                _isShowVoterSlide = value;
+                OnPropertyChanged(nameof(this.IsShowVoterSlide));
+
+                foreach (VoteCandidateVM vm in _voteCandidateColle)
+                {
+                    vm.IsShowVoterSlide = _isShowVoterSlide;
+                }
+            }
+        }
+
+        public bool IsShowVoterListButton
+        {
+            get { return _isShowVoterListButton; }
+            set
+            {
+                _isShowVoterListButton = value;
+                OnPropertyChanged(nameof(this.IsShowVoterListButton));
+
+                foreach (VoteCandidateVM vm in _voteCandidateColle)
+                {
+                    vm.IsShowVoterListButton = _isShowVoterListButton;
                 }
             }
         }
@@ -372,6 +406,8 @@ namespace KomeTube.ViewModel
             {
                 _voteCandidateColle.ElementAt(i).Num = i + 1;
                 _voteCandidateColle.ElementAt(i).IsShowStatistic = this.IsShowStatistic;
+                _voteCandidateColle.ElementAt(i).IsShowVoterListButton = this.IsShowVoterListButton;
+                _voteCandidateColle.ElementAt(i).IsShowVoterSlide = this.IsShowVoterSlide;
             }
         }
 

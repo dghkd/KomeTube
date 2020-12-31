@@ -26,6 +26,8 @@
     </SolidColorBrush>
     <SolidColorBrush x:Key="VoteCandidate.Candidate.Foreground" Color="#FFFFFFEE">
     </SolidColorBrush>
+    <SolidColorBrush x:Key="VoteCandidate.SlideTextItem.Foreground" Color="#BEBEBE">
+    </SolidColorBrush>
 
     <SolidColorBrush x:Key="PuzzleCenter.AnswerList.Background" Color="#FF252526">
     </SolidColorBrush>

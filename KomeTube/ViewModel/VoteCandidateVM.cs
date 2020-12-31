@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using System.Collections.Concurrent;
+using System.Timers;
 
 using KomeTube.Common;
 
@@ -23,8 +25,14 @@ namespace KomeTube.ViewModel
         private bool _isReadOnly;
         private BitmapImage _img;
         private bool _isShowStatistic;
+        private bool _isShowVoterSlide;
+        private bool _isShowVoteListButton;
         private ObservableCollection<CommentVM> _voterColle;
         private object _lockVoterColleObj;
+        private ObservableCollection<SlideTextItemVM> _showVoterColle;
+        private object _lockShowVoterColleObj;
+        private ConcurrentQueue<SlideTextItemVM> _showVoterQueue;
+        private Timer _showVoterQueueTimer;
 
         #endregion Private Member
 
@@ -33,11 +41,22 @@ namespace KomeTube.ViewModel
         public VoteCandidateVM()
         {
             _voterColle = new ObservableCollection<CommentVM>();
+            _showVoterColle = new ObservableCollection<SlideTextItemVM>();
+            _showVoterQueue = new ConcurrentQueue<SlideTextItemVM>();
             _lockVoterColleObj = new object();
+            _lockShowVoterColleObj = new object();
+            _showVoterQueueTimer = new Timer();
+            _showVoterQueueTimer.Elapsed += On_ShowVoterQueue_Elapsed;
+            _showVoterQueueTimer.Interval = 100;
+
             _name = "";
             _count = 0;
+
             this.VoterColle = CollectionViewSource.GetDefaultView(_voterColle);
             BindingOperations.EnableCollectionSynchronization(_voterColle, _lockVoterColleObj);
+
+            this.ShowVoterColle = CollectionViewSource.GetDefaultView(_showVoterColle);
+            BindingOperations.EnableCollectionSynchronization(_showVoterColle, _lockShowVoterColleObj);
         }
 
         #endregion Constroctor
@@ -108,12 +127,40 @@ namespace KomeTube.ViewModel
         }
 
         /// <summary>
+        /// 顯示投票者動畫集合
+        /// </summary>
+        public ICollectionView ShowVoterColle
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// 取得或設定是否顯示即時統計
         /// </summary>
         public bool IsShowStatistic
         {
             get { return _isShowStatistic; }
             set { _isShowStatistic = value; OnPropertyChanged(nameof(IsShowStatistic)); }
+        }
+
+        /// <summary>
+        /// 取得或設定是否顯示投票者滑動動畫
+        /// </summary>
+        public bool IsShowVoterSlide
+        {
+            get { return _isShowVoterSlide; }
+            set { _isShowVoterSlide = value; OnPropertyChanged(nameof(this.IsShowVoterSlide)); }
+        }
+
+        public bool IsShowVoterListButton
+        {
+            get { return _isShowVoteListButton; }
+            set
+            {
+                _isShowVoteListButton = value;
+                OnPropertyChanged(nameof(this.IsShowVoterListButton));
+            }
         }
 
         #endregion Public Member
@@ -151,6 +198,8 @@ namespace KomeTube.ViewModel
         /// <param name="voter"></param>
         public void AddVoter(CommentVM voter)
         {
+            AddShowVoterColle(voter);
+
             _voterColle.Add(voter);
             this.Count = _voterColle.Count;
 
@@ -166,9 +215,61 @@ namespace KomeTube.ViewModel
             this.Count = 0;
             this.Rate = 0;
 
+            _showVoterColle.Clear();
+            SlideTextItemVM tmp;
+            while (_showVoterQueue.TryDequeue(out tmp)) ;
+
             OnPropertyChanged("");
         }
 
+        public void RemoveShowVoter(SlideTextItemVM vm)
+        {
+            _showVoterColle.Remove(vm);
+        }
+
         #endregion Public Method
+
+        #region Private Method
+
+        private void AddShowVoterColle(CommentVM voter)
+        {
+            SlideTextItemVM showVoter = new SlideTextItemVM();
+            showVoter.Text = voter.AuthorName;
+            showVoter.SlideFinished += On_ShowVoter_SlideFinished;
+            _showVoterQueue.Enqueue(showVoter);
+            _showVoterQueueTimer.Start();
+        }
+
+        #endregion Private Method
+
+        #region Event Handle
+
+        private void On_ShowVoter_SlideFinished(SlideTextItemVM sender)
+        {
+            RemoveShowVoter(sender);
+        }
+
+        private void On_ShowVoterQueue_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            SlideTextItemVM showVoter;
+            if (_showVoterQueue.TryDequeue(out showVoter))
+            {
+                _showVoterColle.Insert(0, showVoter);
+                if (_showVoterColle.Count > 2)
+                {
+                    SlideTextItemVM t = _showVoterColle.ElementAtOrDefault(2);
+                    if (t != null)
+                    {
+                        t.IsClose = true;
+                    }
+                }
+            }
+            else
+            {
+                _showVoterQueueTimer.Stop();
+            }
+        }
+
+        #endregion Event Handle
     }
 }

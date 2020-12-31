@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="KomeTube.View.Component.SlideTextItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:KomeTube.View.Component"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="80"
+             d:DesignWidth="80"
+             Loaded="On_Loaded"
+             RenderTransformOrigin="0.5,0.5">
+    <UserControl.RenderTransform>
+        <TransformGroup>
+            <ScaleTransform />
+            <TranslateTransform />
+        </TransformGroup>
+    </UserControl.RenderTransform>
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="local:SlideTextItem.BeginShow">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                     From="0"
+                                     To="1"
+                                     Duration="0:0:.5" />
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
+                                     From="0"
+                                     To="1"
+                                     Duration="0:0:.2" />
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
+                                     From="0"
+                                     To="1"
+                                     Duration="0:0:.2" />
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TransformGroup.Children)[1].(TranslateTransform.Y)"
+                                     From="0"
+                                     To="0"
+                                     Duration="0:0:0" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="local:SlideTextItem.BeginSlide">
+            <BeginStoryboard>
+                <Storyboard Completed="On_SlideStoryboard_Completed">
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TransformGroup.Children)[1].(TranslateTransform.Y)"
+                                     From="0"
+                                     To="60"
+                                     Duration="0:0:.2" />
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
+                                     From="1"
+                                     To="0.1"
+                                     Duration="0:0:.2" />
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
+                                     From="1"
+                                     To="0"
+                                     Duration="0:0:.2" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <Grid>
+        <TextBlock HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="14"
+                   Foreground="{StaticResource VoteCandidate.SlideTextItem.Foreground}"
+                   Text="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SlideTextItem}}}"
+                   TextTrimming="CharacterEllipsis"
+                   TextWrapping="NoWrap">
+            <TextBlock.Effect>
+                <DropShadowEffect BlurRadius="1"
+                                  Direction="330"
+                                  Opacity="0.5"
+                                  ShadowDepth="1"
+                                  Color="Black" />
+            </TextBlock.Effect>
+        </TextBlock>
+    </Grid>
+</UserControl>

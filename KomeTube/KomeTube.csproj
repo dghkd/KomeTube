@@ -81,6 +81,7 @@
     <Compile Include="ViewModel\CommentVM.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\PuzzleCenterVM.cs" />
+    <Compile Include="ViewModel\SlideTextItemVM.cs" />
     <Compile Include="ViewModel\VoteCandidateVM.cs" />
     <Compile Include="ViewModel\VotingCenterVM.cs" />
     <Compile Include="View\Component\NumericTextBox.xaml.cs">
@@ -88,6 +89,9 @@
     </Compile>
     <Compile Include="View\Component\PuzzleAnswerView.xaml.cs">
       <DependentUpon>PuzzleAnswerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Component\SlideTextItem.xaml.cs">
+      <DependentUpon>SlideTextItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Component\VoteCandidateView.xaml.cs">
       <DependentUpon>VoteCandidateView.xaml</DependentUpon>
@@ -126,6 +130,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Component\PuzzleAnswerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Component\SlideTextItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

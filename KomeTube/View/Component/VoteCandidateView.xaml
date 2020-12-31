@@ -5,10 +5,10 @@
              xmlns:local="clr-namespace:KomeTube.View.Component"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             MinWidth="200"
-             MinHeight="200"
-             d:DesignHeight="200"
-             d:DesignWidth="200"
+             MinWidth="150"
+             MinHeight="150"
+             d:DesignHeight="100"
+             d:DesignWidth="100"
              Background="{StaticResource VoteCandidate.Candidate.Background}"
              BorderBrush="Gray"
              BorderThickness="1"
@@ -17,7 +17,7 @@
     <Grid Margin="5,5,5,10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="85" />
+            <RowDefinition Height="80" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -101,7 +101,30 @@
             </TextBox>
         </Grid>
 
-        <Grid Grid.Row="1">
+        <Grid x:Name="grid" Grid.Row="1">
+            <ItemsControl MaxWidth="{Binding ActualWidth, ElementName=grid, Mode=OneWay}" ItemsSource="{Binding ShowVoterColle}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:SlideTextItem IsClose="{Binding IsClose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             IsSlideFinished="{Binding IsSlideFinished, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             ShowTime="{Binding ShowTime}"
+                                             Text="{Binding Text}">
+                        </local:SlideTextItem>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.Style>
+                    <Style TargetType="ItemsControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsShowVoterSlide}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsShowVoterSlide}" Value="False">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.Style>
+            </ItemsControl>
             <StackPanel VerticalAlignment="Bottom" Orientation="Vertical">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <TextBlock FontSize="14"
@@ -128,33 +151,45 @@
                         </Run>
                     </TextBlock>
                 </StackPanel>
+
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsShowStatistic}" Value="True">
+                                <Setter Property="Visibility" Value="Visible">
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsShowStatistic}" Value="False">
+                                <Setter Property="Visibility" Value="Hidden">
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
             </StackPanel>
 
             <Button x:Name="BTN_OpenVoterList"
                     Width="30"
                     Height="30"
-                    Margin="0,18,0,0"
+                    Margin="0,12,0,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Command="{Binding CmdOpenVoterColle}">
                 <Image Source="/View/Image/img_voter_list.png">
                 </Image>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsShowVoterListButton}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsShowVoterListButton}" Value="False">
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
             </Button>
-
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsShowStatistic}" Value="True">
-                            <Setter Property="Visibility" Value="Visible">
-                            </Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsShowStatistic}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden">
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
         </Grid>
     </Grid>
 </UserControl>
