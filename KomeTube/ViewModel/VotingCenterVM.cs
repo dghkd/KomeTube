@@ -30,10 +30,11 @@ namespace KomeTube.ViewModel
         private object _lockVoteCandidateColleObj = new object();
         private Timer _timerElapseTime;
         private Dictionary<String, CommentVM> _voterTable;
-        #endregion
 
+        #endregion Private Member
 
         #region Constructor
+
         public VotingCenterVM()
         {
             _allVoteColle = new ObservableCollection<CommentVM>();
@@ -50,8 +51,8 @@ namespace KomeTube.ViewModel
             this.IsShowStatistic = true;
             _voterTable = new Dictionary<string, CommentVM>();
         }
-        #endregion
 
+        #endregion Constructor
 
         #region Publice Member
 
@@ -60,6 +61,7 @@ namespace KomeTube.ViewModel
             get { return _startTime; }
             set { _startTime = value; OnPropertyChanged(nameof(StartTime)); OnPropertyChanged(nameof(StartTimeText)); }
         }
+
         public String StartTimeText
         {
             get
@@ -109,6 +111,7 @@ namespace KomeTube.ViewModel
                 OnPropertyChanged(nameof(Column));
             }
         }
+
         public int Row
         {
             get { return _row; }
@@ -120,13 +123,11 @@ namespace KomeTube.ViewModel
             }
         }
 
-
         public bool IsStarted
         {
             get { return _isStarted; }
             set { _isStarted = value; OnPropertyChanged(nameof(IsStarted)); }
         }
-
 
         public bool IsShowStatistic
         {
@@ -143,13 +144,11 @@ namespace KomeTube.ViewModel
             }
         }
 
-
         public String VoteTitle
         {
             get { return _voteTitle; }
             set { _voteTitle = value; OnPropertyChanged(nameof(VoteTitle)); }
         }
-
 
         public bool IsClosed
         {
@@ -174,12 +173,14 @@ namespace KomeTube.ViewModel
             get;
             private set;
         }
-        #endregion
 
+        #endregion Publice Member
 
         #region Command
+
         public const string CmdKey_Start = "CmdKey_Start";
         private CommandBase _cmdStart;
+
         public CommandBase CmdStart
         {
             get
@@ -190,6 +191,7 @@ namespace KomeTube.ViewModel
 
         public const string CmdKey_Stop = "CmdKey_Stop";
         private CommandBase _cmdStop;
+
         public CommandBase CmdStop
         {
             get
@@ -197,7 +199,6 @@ namespace KomeTube.ViewModel
                 return _cmdStop ?? (_cmdStop = new CommandBase(x => ExecuteCommand(CmdKey_Stop)));
             }
         }
-
 
         public Func<String, VotingCenterVM, bool> CommandAction;
 
@@ -208,10 +209,11 @@ namespace KomeTube.ViewModel
                 this.CommandAction(cmd, this);
             }
         }
-        #endregion
 
+        #endregion Command
 
         #region Public Method
+
         /// <summary>
         /// 開始接收投票
         /// </summary>
@@ -306,8 +308,17 @@ namespace KomeTube.ViewModel
                         OnPropertyChanged(nameof(this.VoteCount));
 
                         candidate.AddVoter(vm);
-                        candidate.Rate = Math.Round((double)candidate.Count / this.VoteCount, 4) * 100;
                         isValidVote = true;
+                        break;
+                    }
+                }
+
+                //計所有得票率
+                if (isValidVote)
+                {
+                    foreach (VoteCandidateVM candidate in _voteCandidateColle)
+                    {
+                        candidate.Rate = Math.Round((double)candidate.Count / this.VoteCount, 4) * 100;
                     }
                 }
 
@@ -317,9 +328,7 @@ namespace KomeTube.ViewModel
             return false;
         }
 
-
-        #endregion
-
+        #endregion Public Method
 
         #region Event Handle
 
@@ -330,10 +339,10 @@ namespace KomeTube.ViewModel
             _timerElapseTime.Change(1000, Timeout.Infinite);
         }
 
-        #endregion
-
+        #endregion Event Handle
 
         #region Private Method
+
         /// <summary>
         /// 依據Column * Row調整投票選項數量
         /// </summary>
@@ -365,7 +374,7 @@ namespace KomeTube.ViewModel
                 _voteCandidateColle.ElementAt(i).IsShowStatistic = this.IsShowStatistic;
             }
         }
-        #endregion
 
+        #endregion Private Method
     }
 }
