@@ -490,6 +490,10 @@ namespace KomeTube.ViewModel
                     this.StatusText = "讀取聊天室";
                     break;
 
+                case CommentLoaderStatus.ParseYtCfgData:
+                    this.StatusText = "解析連線設定";
+                    break;
+
                 case CommentLoaderStatus.ParseLiveChatHtml:
                     this.StatusText = "解析聊天室內容";
                     break;

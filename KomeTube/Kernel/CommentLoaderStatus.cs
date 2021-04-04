@@ -11,6 +11,7 @@ namespace KomeTube.Kernel
         Null,
         Started,
         GetLiveChatHtml,
+        ParseYtCfgData,
         ParseLiveChatHtml,
         GetComments,
 

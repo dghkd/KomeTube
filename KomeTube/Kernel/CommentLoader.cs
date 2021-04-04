@@ -22,7 +22,8 @@ namespace KomeTube.Kernel
         #region Private Member
 
         private String _videoUrl;
-        private String _currentContinuation;
+        private CookieContainer _cookieContainer;
+        private InnerTubeContextData _innerContextData;
         private readonly Object _lockContinuation;
 
         private Task _mainTask;
@@ -35,7 +36,6 @@ namespace KomeTube.Kernel
         public CommentLoader()
         {
             _videoUrl = "";
-            _currentContinuation = "";
             _lockContinuation = new object();
         }
 
@@ -68,7 +68,7 @@ namespace KomeTube.Kernel
             {
                 lock (_lockContinuation)
                 {
-                    return _currentContinuation;
+                    return _innerContextData.continuation;
                 }
             }
 
@@ -76,7 +76,7 @@ namespace KomeTube.Kernel
             {
                 lock (_lockContinuation)
                 {
-                    _currentContinuation = value;
+                    _innerContextData.continuation = value;
                 }
             }
         }
@@ -166,11 +166,11 @@ namespace KomeTube.Kernel
         /// <summary>
         /// 取得Youtube API 'get_live_chat'的位址
         /// </summary>
-        /// <param name="continuation">continuation參數。此參數應從ParseLiveChatHtml或GetComment方法取得</param>
+        /// <param name="apiKey">YtCfg資料中INNERTUBE_API_KEY參數。此參數應從ParseLiveChatHtml或GetComment方法取得</param>
         /// <returns>回傳Youtube API 'get_live_chat'的位址</returns>
-        private String GetLiveChatUrl(String continuation)
+        private String GetLiveChatUrl(String apiKey)
         {
-            String ret = String.Format(@"https://www.youtube.com/live_chat/get_live_chat?continuation={0}&pbj=1", continuation);
+            string ret = @"https://www.youtube.com/youtubei/v1/live_chat/get_live_chat?key=" + apiKey;
 
             return ret;
         }
@@ -202,14 +202,12 @@ namespace KomeTube.Kernel
             }
 
             this.VideoUrl = url;
-            this.CurrentContinuation = continuation;
             RaiseCommentsReceive(firstCommentList);
 
             //持續取得留言
             while (!_mainTaskCancelTS.IsCancellationRequested)
             {
                 List<CommentData> comments = GetComments(ref continuation);
-                this.CurrentContinuation = continuation;
 
                 if (comments != null
                     && comments.Count > 0)
@@ -244,7 +242,7 @@ namespace KomeTube.Kernel
         }
 
         /// <summary>
-        /// 在html中取出window["ytInitialData"] 後方的json code，並解析出continuation
+        /// 取得第一次訪問的cookie資料，並在html中取出ytcfg資料與window["ytInitialData"] 後方的json code，並解析出continuation
         /// </summary>
         /// <param name="liveChatUrl">聊天室位址</param>
         /// <returns>回傳continuation參數值</returns>
@@ -254,13 +252,22 @@ namespace KomeTube.Kernel
             List<CommentData> initComments = new List<CommentData>();
 
             RaiseStatusChanged(CommentLoaderStatus.GetLiveChatHtml);
+            CookieContainer cc = new CookieContainer();
+
+            var handler = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = cc,
+            };
+
             //取得HTML內容
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(handler))
             {
                 try
                 {
                     client.DefaultRequestHeaders.Add("User-Agent", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0");
                     htmlContent = client.GetStringAsync(liveChatUrl).Result;
+                    _cookieContainer = handler.CookieContainer;
                 }
                 catch (Exception e)
                 {
@@ -269,9 +276,21 @@ namespace KomeTube.Kernel
                     return null;
                 }
             }
-            RaiseStatusChanged(CommentLoaderStatus.ParseLiveChatHtml);
+
+            //解析YtCfg
+            RaiseStatusChanged(CommentLoaderStatus.ParseYtCfgData);
+            string strCfg = ParseYtCfg(htmlContent);
+            if (strCfg == null)
+            {
+                Debug.WriteLine(String.Format("[ParseLiveChatHtml] 無法解析YtCfg. HTML content:{0}", htmlContent));
+                RaiseError(CommentLoaderErrorCode.CanNotParseYtCfg, htmlContent);
+                return null;
+            }
+            //解析inner context data
+            _innerContextData = ParseInnerContextData(strCfg);
 
             //解析HTML
+            RaiseStatusChanged(CommentLoaderStatus.ParseLiveChatHtml);
             Match match = Regex.Match(htmlContent, "window\\[\"ytInitialData\"\\] = ({.+});\\s*</script>", RegexOptions.Singleline);
             if (!match.Success)
             {
@@ -293,6 +312,7 @@ namespace KomeTube.Kernel
                     data = jsonData["contents"]["liveChatRenderer"]["continuations"][0]["timedContinuationData"];
                 }
                 continuation = Convert.ToString(JsonHelper.TryGetValue(data, "continuation", ""));
+                _innerContextData.continuation = continuation;
 
                 var actions = jsonData["contents"]["liveChatRenderer"]["actions"];
                 initComments = ParseComment(actions);
@@ -305,6 +325,77 @@ namespace KomeTube.Kernel
             }
 
             return initComments;
+        }
+
+        /// <summary>
+        /// 從第一次訪問的html內容解析出ytcfg字串
+        /// </summary>
+        /// <param name="liveChatHtml"></param>
+        /// <returns></returns>
+        private string ParseYtCfg(string liveChatHtml)
+        {
+            var match = Regex.Match(liveChatHtml, "ytcfg\\.set\\(({.+?})\\);", RegexOptions.Singleline);
+            if (!match.Success)
+            {
+                return null;
+            }
+
+            try
+            {
+                var ytCfg = match.Groups[1].Value;
+                dynamic d = JsonConvert.DeserializeObject(ytCfg);
+                var matches = Regex.Matches(liveChatHtml, "ytcfg\\.set\\(\"([^\"]+)\",\\s*(.+?)\\);?\\r?\n", RegexOptions.Singleline);
+                foreach (Match m in matches)
+                {
+                    var key = m.Groups[1].Value;
+                    var value = m.Groups[2].Value;
+                    var s = "{\"" + key + "\":" + value + "}";
+                    var obb = JsonConvert.DeserializeObject(s);
+                    d.Merge(obb);
+                }
+                return d.ToString(Formatting.None);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(String.Format($"[ParseYtCfg] 無法解析YtCfg資料:{e.Message}"));
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 從YtCfg字串解析inner context資料供取得留言使用
+        /// </summary>
+        /// <param name="strCfg"></param>
+        /// <returns></returns>
+        private InnerTubeContextData ParseInnerContextData(string strCfg)
+        {
+            InnerTubeContextData ret = new InnerTubeContextData();
+            dynamic jsonData = JsonConvert.DeserializeObject<Dictionary<String, dynamic>>(strCfg);
+
+            ret.INNERTUBE_API_KEY = Convert.ToString(JsonHelper.TryGetValue(jsonData, "INNERTUBE_API_KEY", ""));
+
+            ret.context.clickTracking.clickTrackingParams = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.clickTracking.clickTrackingParams", ""));
+
+            ret.context.request.useSsl = Convert.ToBoolean(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.request.useSsl", false));
+
+            ret.context.client.browserName = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.browserName", ""));
+            ret.context.client.browserVersion = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.browserVersion", ""));
+            ret.context.client.clientFormFactor = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.clientFormFactor", ""));
+            ret.context.client.clientName = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.clientName", ""));
+            ret.context.client.clientVersion = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.clientVersion", ""));
+            ret.context.client.deviceMake = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.deviceMake", ""));
+            ret.context.client.deviceModel = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.deviceModel", ""));
+            ret.context.client.gl = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.gl", ""));
+            ret.context.client.hl = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.hl", ""));
+            ret.context.client.originalUrl = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.originalUrl", ""));
+            ret.context.client.osName = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.osName", ""));
+            ret.context.client.osVersion = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.osVersion", ""));
+            ret.context.client.platform = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.platform", ""));
+            ret.context.client.remoteHost = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.remoteHost", ""));
+            ret.context.client.userAgent = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.userAgent", ""));
+            ret.context.client.visitorData = Convert.ToString(JsonHelper.TryGetValueByXPath(jsonData, "INNERTUBE_CONTEXT.client.visitorData", ""));
+
+            return ret;
         }
 
         /// <summary>
@@ -322,29 +413,41 @@ namespace KomeTube.Kernel
 
             RaiseStatusChanged(CommentLoaderStatus.GetComments);
 
-            String chatUrl = GetLiveChatUrl(continuation);
+            String chatUrl = GetLiveChatUrl(_innerContextData.INNERTUBE_API_KEY);
             List<CommentData> ret = null;
             String resp = "";
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                UseCookies = true,
+                CookieContainer = _cookieContainer,
+            };
 
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(handler))
             {
                 try
                 {
+                    StringContent dataContent = new StringContent(_innerContextData.ToString(), Encoding.UTF8, "application/json");
+
                     //取得聊天室留言
                     client.DefaultRequestHeaders.Add("User-Agent", @"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0");
-                    resp = client.GetStringAsync(chatUrl).Result;
+                    client.DefaultRequestHeaders.Add("Origin", "https://www.youtube.com");
+
+                    HttpResponseMessage respMsg = client.PostAsync(chatUrl, dataContent).Result;
+                    resp = respMsg.Content.ReadAsStringAsync().Result;
 
                     //解析continuation供下次取得留言使用
                     dynamic jsonData = JsonConvert.DeserializeObject<Dictionary<String, dynamic>>(resp);
-                    var data = jsonData["response"]["continuationContents"]["liveChatContinuation"]["continuations"][0]["invalidationContinuationData"];
+                    var data = jsonData["continuationContents"]["liveChatContinuation"]["continuations"][0]["invalidationContinuationData"];
                     if (data == null)
                     {
-                        data = jsonData["response"]["continuationContents"]["liveChatContinuation"]["continuations"][0]["timedContinuationData"];
+                        data = jsonData["continuationContents"]["liveChatContinuation"]["continuations"][0]["timedContinuationData"];
                     }
                     continuation = Convert.ToString(JsonHelper.TryGetValue(data, "continuation", ""));
+                    _innerContextData.continuation = continuation;
+                    _cookieContainer = handler.CookieContainer;
 
                     //解析留言資料
-                    var commentActions = jsonData["response"]["continuationContents"]["liveChatContinuation"]["actions"];
+                    var commentActions = jsonData["continuationContents"]["liveChatContinuation"]["actions"];
                     ret = ParseComment(commentActions);
                 }
                 catch (Exception e)

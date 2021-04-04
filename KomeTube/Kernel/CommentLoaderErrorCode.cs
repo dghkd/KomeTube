@@ -21,6 +21,12 @@ namespace KomeTube.Kernel
         CanNotGetLiveChatHtml,
 
         /// <summary>
+        /// 無法解析連線設定
+        /// <para>發生此錯誤時，附帶的錯誤資訊為聊天室HTML內容</para>
+        /// </summary>
+        CanNotParseYtCfg,
+
+        /// <summary>
         /// 無法解析HTML
         /// <para>發生此錯誤時，附帶的錯誤資訊為聊天室HTML內容.</para>
         /// </summary>
