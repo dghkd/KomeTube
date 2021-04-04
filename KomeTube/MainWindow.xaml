@@ -152,11 +152,12 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Width="36" Header="">
+                    <DataGridTemplateColumn Width="42" Header="">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Margin="2" Source="{Binding AuthorPhotoUrl}">
-                                </Image>
+                                <Button Command="{Binding CmdOpenAuthorChannelUrl}" Cursor="Hand">
+                                    <Image  Source="{Binding AuthorPhotoUrl}" />
+                                </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

@@ -196,6 +196,48 @@ namespace KomeTube.ViewModel
             }
         }
 
+        public String AuthorChannelUrl
+        {
+            get
+            {
+                string url = @"https://www.youtube.com/channel/" + this.AuthorID;
+                return url;
+            }
+        }
+
         #endregion Public Member
+
+        #region Command
+
+        private CommandBase _cmdOpenAuthorChannelUrl;
+
+        public CommandBase CmdOpenAuthorChannelUrl
+        {
+            get
+            {
+                return _cmdOpenAuthorChannelUrl ?? (_cmdOpenAuthorChannelUrl = new CommandBase(x => OpenAuthorChannelUrl()));
+            }
+        }
+
+        public Func<String, CommentVM, bool> CommandAction;
+
+        private void ExecuteCommand(String cmd)
+        {
+            if (this.CommandAction != null)
+            {
+                this.CommandAction(cmd, this);
+            }
+        }
+
+        #endregion Command
+
+        #region Private Method
+
+        private void OpenAuthorChannelUrl()
+        {
+            System.Diagnostics.Process.Start(this.AuthorChannelUrl);
+        }
+
+        #endregion Private Method
     }
 }
