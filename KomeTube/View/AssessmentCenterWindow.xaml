@@ -32,7 +32,7 @@
                 <ColumnDefinition Width="210" />
                 <ColumnDefinition Width="*" MinWidth="190" />
             </Grid.ColumnDefinitions>
-            <StackPanel Margin="10,10,0,0"
+            <StackPanel Margin="10,85,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Orientation="Horizontal">
@@ -42,7 +42,7 @@
                 </TextBlock>
             </StackPanel>
 
-            <StackPanel Margin="10,30,0,0"
+            <StackPanel Margin="10,105,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Orientation="Horizontal">
@@ -52,7 +52,7 @@
                 </TextBlock>
             </StackPanel>
 
-            <StackPanel Margin="10,55,0,0" Orientation="Vertical">
+            <StackPanel Margin="10,10,0,0" Orientation="Vertical">
 
                 <CheckBox x:Name="CHB_ShowIntroduction"
                           Content="顯示簡介欄"
@@ -78,7 +78,26 @@
             <StackPanel Grid.Column="1"
                         Margin="0,10,0,0"
                         Orientation="Vertical">
-                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+
+                <CheckBox x:Name="CHB_CanChangeRate"
+                          Content="允許重新評分"
+                          IsChecked="{Binding CanChangeRate}"
+                          IsEnabled="{Binding CanChangeRateEnable}">
+                </CheckBox>
+                <CheckBox x:Name="CHB_ShowRaterName"
+                          Content="顯示評分者名稱"
+                          IsChecked="{Binding IsShowRaterName}">
+                </CheckBox>
+                <CheckBox x:Name="CHB_ShowSpecialRateButton"
+                          Content="顯示加分按鈕"
+                          IsChecked="{Binding IsShowSpecialRateButton}"
+                          Visibility="Collapsed">
+                </CheckBox>
+                <CheckBox x:Name="CHB_ShowVoterListButton"
+                          Content="顯示評分者列表按鈕"
+                          IsChecked="{Binding IsShowRaterListButton}" />
+
+                <StackPanel Margin="0,22,0,0" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="分數範圍:" />
                     <component:NumericTextBox x:Name="TXTBOX_MinScore"
                                               Width="30"
@@ -100,29 +119,10 @@
                                               Text="{Binding MaxScore, UpdateSourceTrigger=PropertyChanged}">
                     </component:NumericTextBox>
                 </StackPanel>
-
-                <CheckBox x:Name="CHB_CanChangeRate"
-                          Content="允許重新評分"
-                          IsChecked="{Binding CanChangeRate}"
-                          IsEnabled="{Binding CanChangeRateEnable}">
-                </CheckBox>
-                <CheckBox x:Name="CHB_ShowRaterName"
-                          Content="顯示評分者名稱"
-                          IsChecked="{Binding IsShowRaterName}">
-                </CheckBox>
-                <CheckBox x:Name="CHB_ShowSpecialRateButton"
-                          Content="顯示加分按鈕"
-                          IsChecked="{Binding IsShowSpecialRateButton}"
-                          Visibility="Collapsed">
-                </CheckBox>
-                <CheckBox x:Name="CHB_ShowVoterListButton"
-                          Content="顯示評分者列表按鈕"
-                          IsChecked="{Binding IsShowRaterListButton}" />
-
                 <!--  Start/Stop  -->
                 <Button x:Name="BTN_Start"
                         Width="75"
-                        Margin="2,20,0,5"
+                        Margin="2,3,0,5"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center">
                     <Button.Style>

@@ -27,31 +27,33 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="120" />
+            <RowDefinition Height="125" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="70" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="65" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="210" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <StackPanel Margin="10,10,0,0"
+            <StackPanel Margin="10,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Orientation="Horizontal">
+                        Orientation="Horizontal"
+                        Grid.Row="1">
                 <TextBlock Text="開始時間:">
                 </TextBlock>
                 <TextBlock Margin="3,0,0,0" Text="{Binding StartTimeText}">
                 </TextBlock>
             </StackPanel>
 
-            <StackPanel Margin="10,30,0,0"
+            <StackPanel Margin="10,20,0,0"
+                        Grid.Row="1"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Orientation="Horizontal">
@@ -61,7 +63,8 @@
                 </TextBlock>
             </StackPanel>
 
-            <StackPanel Margin="10,50,0,0"
+            <StackPanel Margin="10,40,0,0"
+                        Grid.Row="1"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Orientation="Horizontal">
@@ -72,14 +75,16 @@
             </StackPanel>
 
             <TextBlock Grid.Column="1"
-                       Margin="0.4,10,0,0"
+                       Grid.Row="1"
+                       Margin="0.4,0,0,0"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Top"
                        Text="欄位:">
             </TextBlock>
 
             <StackPanel Grid.Column="1"
-                        Margin="0.4,30,0,0"
+                        Grid.Row="1"
+                        Margin="0.4,20,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Orientation="Horizontal">
@@ -116,8 +121,9 @@
 
             <Button x:Name="BTN_Start"
                     Grid.Column="1"
+                    Grid.Row="1"
                     Width="75"
-                    Margin="100,32,10,0"
+                    Margin="100,22,10,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top">
                 <Button.Style>
@@ -139,8 +145,8 @@
                 </Button.Style>
             </Button>
 
-            <StackPanel Grid.Row="1"
-                        Margin="10,0,0,0"
+            <StackPanel Grid.Row="0"
+                        Margin="10,10,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Orientation="Vertical">
@@ -157,8 +163,9 @@
                 </CheckBox>
             </StackPanel>
 
-            <StackPanel Grid.Row="1"
+            <StackPanel Grid.Row="0"
                         Grid.Column="1"
+                        Margin="0,10,0,0"
                         Orientation="Vertical">
                 <CheckBox x:Name="CHB_CanChangeVote"
                           Content="允許換票"
