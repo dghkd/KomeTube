@@ -540,7 +540,15 @@ namespace KomeTube.Kernel
                 for (int i = 0; i < runs.Count; i++)
                 {
                     string xPath = String.Format($"message.runs.{i.ToString()}.text");
-                    liveChatTextMessageRenderer.message.simpleText += Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, xPath, ""));
+                    if (xPath != null)
+                    {
+                        liveChatTextMessageRenderer.message.simpleText += Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, xPath, ""));
+                    }
+                    string xPath2 = String.Format($"message.runs.{i.ToString()}.emoji.emojiId");
+                    if (xPath2 != null)
+                    {
+                        liveChatTextMessageRenderer.message.simpleText += Convert.ToString(JsonHelper.TryGetValueByXPath(txtMsgRd, xPath2, ""));
+                    }
                 }
             }
             else
