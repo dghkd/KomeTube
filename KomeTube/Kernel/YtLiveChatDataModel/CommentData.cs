@@ -6,9 +6,73 @@ using System.Threading.Tasks;
 
 namespace KomeTube.Kernel.YtLiveChatDataModel
 {
+    public class Thumbnails
+    {
+        public string url { get; set; }
+        public int width { get; set; }
+        public int height { get; set; }
+    }
+
+    public class Accessibility
+    {
+        public Accessibility()
+        {
+            this.accessibilityData = new AccessibilityData();
+        }
+
+        public AccessibilityData accessibilityData { get; set; }
+    }
+
+    public class Image
+    {
+        public Image()
+        {
+            this.thumbnails = new List<Thumbnails>();
+            this.accessibility = new Accessibility();
+        }
+
+        public List<Thumbnails> thumbnails { get; set; }
+        public Accessibility accessibility { get; set; }
+    }
+
+    public class Emoji
+    {
+        public Emoji()
+        {
+            this.shortcuts = new List<string>();
+            this.searchTerms = new List<string>();
+            this.image = new Image();
+            this.isCustomEmoji = false;
+        }
+
+        public string emojiId { get; set; }
+        public List<string> shortcuts { get; set; }
+        public List<string> searchTerms { get; set; }
+        public Image image { get; set; }
+        public bool isCustomEmoji { get; set; }
+    }
+
+    public class Runs
+    {
+        public Runs()
+        {
+            this.emoji = new Emoji();
+        }
+
+        public string text { get; set; }
+
+        public Emoji emoji { get; set; }
+    }
+
     public class Message
     {
+        public Message()
+        {
+            this.runs = new List<Runs>();
+        }
+
         public string simpleText { get; set; }
+        public List<Runs> runs { get; set; }
     }
 
     public class AuthorName

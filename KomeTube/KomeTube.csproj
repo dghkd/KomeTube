@@ -47,6 +47,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -56,6 +57,7 @@
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -95,6 +97,26 @@
     <Compile Include="View\Component\ContestantView.xaml.cs">
       <DependentUpon>ContestantView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Component\HtmlTextBlock\Defines\Cofe3\Implements\HtmlAttributeStringSerializer.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\Cofe3\Implements\ParamParser.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\Cofe3\Interfaces\ICofeService.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\Cofe3\Interfaces\IParamParser.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\Cofe3\Interfaces\IPropertySerializer.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\CurrentState.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\Defines.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\DependencyProperty.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\Header.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\InlineImage.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\PropertyList.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\Stylelist.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Defines\Utils.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\HtmlHighlightTextBlock.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\HtmlTextBlock.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Parse\HtmlParser.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Parse\HtmlTag.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Parse\HtmlTagNode.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Parse\HtmlTagTree.cs" />
+    <Compile Include="View\Component\HtmlTextBlock\Parse\HtmlUpdater.cs" />
     <Compile Include="View\Component\NumericTextBox.xaml.cs">
       <DependentUpon>NumericTextBox.xaml</DependentUpon>
     </Compile>
@@ -226,6 +248,7 @@
   <ItemGroup>
     <Resource Include="View\Image\icon_logo.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
