@@ -18,3 +18,8 @@
 4. 合併INNERTUBE_CONTEXT與continuation參數，並序列化為json  
 5. 利用POST方法將INNERTUBE_CONTEXT與continuation參數代入StringContent取得聊天室留言以及下一次的continuation參數 (https://www.youtube.com/youtubei/v1/live_chat/get_live_chat?key={INNERTUBE_API_KEY})  
 6. 循環利用INNERTUBE_CONTEXT與新的continuation參數取得新留言  
+
+## Html TextBlock
+支援同時顯示文字與圖片功能  
+HtmlTextBlock UI元件原始碼:  
+[https://github.com/TheBauwssss/AdvancedHtmlTextBlock](https://github.com/TheBauwssss/AdvancedHtmlTextBlock)
