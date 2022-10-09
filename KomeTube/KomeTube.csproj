@@ -79,6 +79,7 @@
     <Compile Include="Common\CommandBase.cs" />
     <Compile Include="Common\ViewModelBase.cs" />
     <Compile Include="Kernel\CommentExportData.cs" />
+    <Compile Include="Kernel\StartupParameter.cs" />
     <Compile Include="Kernel\YtLiveChatDataModel\InnerTubeContextData.cs" />
     <Compile Include="Model\VoterTable.cs" />
     <Compile Include="ViewModel\AssessmentCenterVM.cs" />

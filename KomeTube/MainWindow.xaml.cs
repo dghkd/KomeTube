@@ -41,6 +41,8 @@ namespace KomeTube
             InitializeComponent();
 
             _mainVM = new MainWindowVM();
+            LoadStartupParameter();
+
             this.DataContext = _mainVM;
             _mainVM.CommandAction = On_MainVM_CommentAction;
 
@@ -53,6 +55,15 @@ namespace KomeTube
         #endregion Constructor
 
         #region Private Method
+
+        private void LoadStartupParameter()
+        {
+            if (App.AppStartupParameter.Url != null
+                && App.AppStartupParameter.Url != "")
+            {
+                _mainVM.VideoUrl = App.AppStartupParameter.Url;
+            }
+        }
 
         public Visual GetDescendantByType(Visual element, Type type)
         {
@@ -84,6 +95,15 @@ namespace KomeTube
         #endregion Private Method
 
         #region Event Handle
+
+        private void On_Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_mainVM.VideoUrl != null
+                && _mainVM.VideoUrl != "")
+            {
+                _mainVM.CmdStart.Execute(null);
+            }
+        }
 
         private void On_Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {

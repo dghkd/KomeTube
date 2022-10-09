@@ -12,6 +12,7 @@
         MinHeight="380"
         Background="{StaticResource Main.Window.Background}"
         Icon="View/Image/icon_logo.ico"
+        Loaded="On_Window_Loaded"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
 
