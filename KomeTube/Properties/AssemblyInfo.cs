@@ -49,5 +49,5 @@ using System.Windows;
 // 您可以指定所有的值，也可以依照以下的方式，使用 '*' 將組建和修訂編號
 // 指定為預設值:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.0.0.5230")]
-[assembly: AssemblyFileVersion("4.0.0.5230")]
+[assembly: AssemblyVersion("5.0.0.10090")]
+[assembly: AssemblyFileVersion("5.0.0.10090")]
