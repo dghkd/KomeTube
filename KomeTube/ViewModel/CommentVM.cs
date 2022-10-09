@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-
+using System.Windows;
 using KomeTube.Common;
 using KomeTube.Kernel.YtLiveChatDataModel;
 
@@ -15,6 +16,7 @@ namespace KomeTube.ViewModel
 
         private CommentData _data;
         private DateTime _dateTime;
+        private bool _isEnableCopyMessage;
 
         #endregion Private Member
 
@@ -23,6 +25,8 @@ namespace KomeTube.ViewModel
         public CommentVM(CommentData data)
         {
             _data = data;
+
+            this.IsEnableCopyMessage = true;
         }
 
         #endregion Constructor
@@ -147,6 +151,31 @@ namespace KomeTube.ViewModel
         }
 
         /// <summary>
+        /// 留言內容全文字版，表情符號改由shortcut表示，而非圖片網址
+        /// </summary>
+        public string ContentMessage
+        {
+            get
+            {
+                string content = "";
+                if (_data.addChatItemAction.item.IsPaidMessage)
+                {
+                    content = FormatContentMessage(_data.addChatItemAction.item.liveChatPaidMessageRenderer.message);
+
+                    return String.Format("{0} {1}",
+                        _data.addChatItemAction.item.liveChatPaidMessageRenderer.purchaseAmountText.simpleText,
+                        content);
+                }
+                else
+                {
+                    content = FormatContentMessage(_data.addChatItemAction.item.liveChatTextMessageRenderer.message);
+
+                    return content;
+                }
+            }
+        }
+
+        /// <summary>
         /// 取得付費金額(包含貨幣符號)，若非付費留言則回傳null
         /// </summary>
         public String PaidMessage
@@ -212,6 +241,22 @@ namespace KomeTube.ViewModel
             }
         }
 
+        public bool IsEnableCopyMessage
+        {
+            get
+            {
+                return _isEnableCopyMessage;
+            }
+            set
+            {
+                if (_isEnableCopyMessage != value)
+                {
+                    _isEnableCopyMessage = value;
+                    OnPropertyChanged(nameof(this.IsEnableCopyMessage));
+                }
+            }
+        }
+
         #endregion Public Member
 
         #region Command
@@ -223,6 +268,16 @@ namespace KomeTube.ViewModel
             get
             {
                 return _cmdOpenAuthorChannelUrl ?? (_cmdOpenAuthorChannelUrl = new CommandBase(x => OpenAuthorChannelUrl()));
+            }
+        }
+
+        private CommandBase _cmdCopyContentMessage;
+
+        public CommandBase CmdCopyContentMessage
+        {
+            get
+            {
+                return _cmdCopyContentMessage ?? (_cmdCopyContentMessage = new CommandBase(x => CopyContentMessage()));
             }
         }
 
@@ -248,6 +303,39 @@ namespace KomeTube.ViewModel
                 Runs r = msg.runs[i];
                 ret += r.text;
                 ret += FormatEmojiImage(r.emoji);
+            }
+
+            return ret;
+        }
+
+        private string FormatContentMessage(Message msg)
+        {
+            string ret = "";
+            for (int i = 0; i < msg.runs.Count; i++)
+            {
+                Runs r = msg.runs[i];
+                ret += r.text;
+                if (r.emoji.shortcuts.Count > 0)
+                {
+                    //判斷表情符號類型
+                    if (r.emoji.isCustomEmoji
+                        && r.emoji.shortcuts.Count >= 2)
+                    {
+                        //頻道自訂表符
+                        ret += r.emoji.shortcuts[1];
+                    }
+                    else if (r.emoji.isCustomEmoji
+                        && r.emoji.shortcuts.Count < 2)
+                    {
+                        //YT通用自訂表符
+                        ret += r.emoji.shortcuts[0];
+                    }
+                    else
+                    {
+                        //文字符號表符
+                        ret += r.emoji.emojiId;
+                    }
+                }
             }
 
             return ret;
@@ -284,6 +372,24 @@ namespace KomeTube.ViewModel
         private void OpenAuthorChannelUrl()
         {
             System.Diagnostics.Process.Start(this.AuthorChannelUrl);
+        }
+
+        private void CopyContentMessage()
+        {
+            try
+            {
+                Clipboard.SetText(this.ContentMessage);
+                this.IsEnableCopyMessage = false;
+                Task.Run(() =>
+                {
+                    SpinWait.SpinUntil(() => false, 500);
+                    this.IsEnableCopyMessage = true;
+                });
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         #endregion Private Method

@@ -140,7 +140,9 @@
         <Grid Grid.Row="2">
             <DataGrid x:Name="DG_Comments" Style="{StaticResource CommentDataGridStyle}">
                 <DataGrid.Resources>
-                    <Style BasedOn="{StaticResource DataGridCellStyle_Custom}" TargetType="{x:Type DataGridCell}" />
+                    <Style BasedOn="{StaticResource DataGridCellStyle_Custom}" TargetType="{x:Type DataGridCell}">
+                        <EventSetter Event="MouseDoubleClick" Handler="On_Comment_DataGridCell_MouseDoubleClick" />
+                    </Style>
                     <Style BasedOn="{StaticResource DataGridRowStyle}" TargetType="{x:Type DataGridRow}" />
                 </DataGrid.Resources>
                 <DataGrid.Columns>
@@ -194,6 +196,44 @@
                                                        Foreground="{StaticResource Main.DataGrid.Foreground}"
                                                        Html="{Binding Message, Mode=OneWay}"
                                                        TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!--  Copy Button  -->
+                    <DataGridTemplateColumn Width="20" Header="">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="20"
+                                        Height="20"
+                                        Command="{Binding CmdCopyContentMessage}"
+                                        Cursor="Hand"
+                                        IsEnabled="{Binding IsEnableCopyMessage}">
+                                    <!--  Icon  -->
+                                    <Image>
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Setter Property="Source" Value="/View/Image/icon_copy.png" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEnableCopyMessage}" Value="False">
+                                                        <Setter Property="Source" Value="/View/Image/icon_copy_disable.png" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

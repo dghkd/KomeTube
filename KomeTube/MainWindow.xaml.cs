@@ -184,6 +184,23 @@ namespace KomeTube
             return true;
         }
 
+        private void On_Comment_DataGridCell_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGridCell cell = sender as DataGridCell;
+            if (cell == null)
+            {
+                return;
+            }
+
+            CommentVM vm = cell.DataContext as CommentVM;
+            if (vm == null)
+            {
+                return;
+            }
+
+            vm.CmdCopyContentMessage.Execute(null);
+        }
+
         #endregion Event Handle
     }
 }
